@@ -13,8 +13,8 @@ export default async function HomePage() {
 
       <main className="container py-8">
         <div className="mb-8">
-          <h2 className="mb-2 text-3xl font-bold">محصولات صنایع دستی ایرانی</h2>
-          <p className="text-muted-foreground">بهترین محصولات دست‌ساز ایرانی را از ما بخرید</p>
+          <h2 className="mb-2 text-3xl font-bold">قاب گوشی با طرح‌های منحصر به فرد</h2>
+          <p className="text-muted-foreground">طرح مورد علاقه خود را انتخاب کنید و مدل گوشی‌تان را مشخص کنید</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -23,10 +23,8 @@ export default async function HomePage() {
               key={product.id}
               id={product.id}
               name={product.name}
-              price={product.price}
               image_url={product.image_url}
-              category={product.category}
-              onAddToCart={() => {}}
+              description={product.description}
             />
           ))}
         </div>

@@ -26,7 +26,9 @@ export default async function OrdersPage() {
         id,
         product_name,
         product_price,
-        quantity
+        quantity,
+        phone_brand,
+        phone_model
       )
     `,
     )
@@ -113,9 +115,14 @@ export default async function OrdersPage() {
                     <h3 className="mb-2 text-sm font-semibold">اقلام سفارش:</h3>
                     {order.order_items?.map((item: any) => (
                       <div key={item.id} className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">
-                          {item.product_name} × {item.quantity}
-                        </span>
+                        <div>
+                          <span className="text-muted-foreground">
+                            {item.product_name} × {item.quantity}
+                          </span>
+                          <span className="mr-2 text-xs text-muted-foreground">
+                            ({item.phone_brand} {item.phone_model})
+                          </span>
+                        </div>
                         <span className="font-semibold">
                           {new Intl.NumberFormat("fa-IR").format(item.product_price * item.quantity)} تومان
                         </span>

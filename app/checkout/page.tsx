@@ -25,9 +25,13 @@ export default async function CheckoutPage() {
       products (
         id,
         name,
-        price,
-        image_url,
-        stock
+        image_url
+      ),
+      phone_cases (
+        id,
+        brand,
+        model,
+        price
       )
     `,
     )
@@ -40,7 +44,7 @@ export default async function CheckoutPage() {
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
 
   const total = cartItems.reduce((sum, item: any) => {
-    return sum + item.products.price * item.quantity
+    return sum + item.phone_cases.price * item.quantity
   }, 0)
 
   const formattedTotal = new Intl.NumberFormat("fa-IR").format(total)
@@ -77,7 +81,10 @@ export default async function CheckoutPage() {
                       <div className="flex-1">
                         <h4 className="text-sm font-medium">{item.products.name}</h4>
                         <p className="text-xs text-muted-foreground">
-                          {item.quantity} × {new Intl.NumberFormat("fa-IR").format(item.products.price)} تومان
+                          {item.phone_cases.brand} {item.phone_cases.model}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.quantity} × {new Intl.NumberFormat("fa-IR").format(item.phone_cases.price)} تومان
                         </p>
                       </div>
                     </div>

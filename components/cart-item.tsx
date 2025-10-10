@@ -16,10 +16,22 @@ interface CartItemProps {
   price: number
   image_url: string
   quantity: number
-  stock: number
+  phoneBrand: string
+  phoneModel: string
+  available: boolean
 }
 
-export function CartItem({ id, productId, name, price, image_url, quantity, stock }: CartItemProps) {
+export function CartItem({
+  id,
+  productId,
+  name,
+  price,
+  image_url,
+  quantity,
+  phoneBrand,
+  phoneModel,
+  available,
+}: CartItemProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -29,7 +41,7 @@ export function CartItem({ id, productId, name, price, image_url, quantity, stoc
   const formattedTotal = new Intl.NumberFormat("fa-IR").format(price * quantity)
 
   const updateQuantity = async (newQuantity: number) => {
-    if (newQuantity < 1 || newQuantity > stock) return
+    if (newQuantity < 1) return
 
     setIsLoading(true)
     try {
@@ -84,7 +96,13 @@ export function CartItem({ id, productId, name, price, image_url, quantity, stoc
           <div className="flex flex-1 flex-col justify-between">
             <div>
               <h3 className="font-semibold">{name}</h3>
-              <p className="text-sm text-muted-foreground">{formattedPrice} تومان</p>
+              <p className="text-sm text-muted-foreground">
+                {phoneBrand} {phoneModel}
+              </p>
+              <div className="mt-1 flex items-center gap-2">
+                <p className="text-sm font-medium">{formattedPrice} تومان</p>
+                {!available && <span className="text-xs text-red-600">(ناموجود)</span>}
+              </div>
             </div>
 
             <div className="flex items-center justify-between">
@@ -104,7 +122,7 @@ export function CartItem({ id, productId, name, price, image_url, quantity, stoc
                   size="icon"
                   className="h-8 w-8 bg-transparent"
                   onClick={() => updateQuantity(quantity + 1)}
-                  disabled={isLoading || quantity >= stock}
+                  disabled={isLoading || !available}
                 >
                   <Plus className="h-4 w-4" />
                 </Button>

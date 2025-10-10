@@ -41,7 +41,6 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
 
       if (!user) throw new Error("User not authenticated")
 
-      // Get cart items
       const { data: cartItems } = await supabase
         .from("cart_items")
         .select(
@@ -49,7 +48,12 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           quantity,
           products (
             id,
-            name,
+            name
+          ),
+          phone_cases (
+            id,
+            brand,
+            model,
             price
           )
         `,
@@ -78,13 +82,15 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
 
       if (orderError) throw orderError
 
-      // Create order items
       const orderItems = cartItems.map((item: any) => ({
         order_id: order.id,
         product_id: item.products.id,
         product_name: item.products.name,
-        product_price: item.products.price,
+        product_price: item.phone_cases.price,
         quantity: item.quantity,
+        phone_case_id: item.phone_cases.id,
+        phone_brand: item.phone_cases.brand,
+        phone_model: item.phone_cases.model,
       }))
 
       const { error: itemsError } = await supabase.from("order_items").insert(orderItems)

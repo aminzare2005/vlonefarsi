@@ -27,9 +27,14 @@ export default async function CartPage() {
       products (
         id,
         name,
+        image_url
+      ),
+      phone_cases (
+        id,
+        brand,
+        model,
         price,
-        image_url,
-        stock
+        available
       )
     `,
     )
@@ -37,7 +42,7 @@ export default async function CartPage() {
 
   const total =
     cartItems?.reduce((sum, item: any) => {
-      return sum + item.products.price * item.quantity
+      return sum + item.phone_cases.price * item.quantity
     }, 0) || 0
 
   const formattedTotal = new Intl.NumberFormat("fa-IR").format(total)
@@ -70,10 +75,12 @@ export default async function CartPage() {
                     id={item.id}
                     productId={item.products.id}
                     name={item.products.name}
-                    price={item.products.price}
+                    price={item.phone_cases.price}
                     image_url={item.products.image_url}
                     quantity={item.quantity}
-                    stock={item.products.stock}
+                    phoneBrand={item.phone_cases.brand}
+                    phoneModel={item.phone_cases.model}
+                    available={item.phone_cases.available}
                   />
                 ))}
               </div>

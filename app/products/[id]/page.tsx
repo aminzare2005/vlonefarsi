@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { Header } from "@/components/header"
-import { AddToCartButton } from "@/components/add-to-cart-button"
+import { PhoneCaseSelector } from "@/components/phone-case-selector"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
     notFound()
   }
 
-  const formattedPrice = new Intl.NumberFormat("fa-IR").format(product.price)
+  const { data: phoneCases } = await supabase.from("phone_cases").select("*").order("brand").order("model")
 
   return (
     <div className="min-h-screen">
@@ -43,9 +43,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
           <div className="flex flex-col gap-6">
             <div>
-              <div className="mb-2 text-sm text-muted-foreground">{product.category}</div>
               <h1 className="mb-4 text-3xl font-bold">{product.name}</h1>
-              <p className="text-4xl font-bold text-primary">{formattedPrice} تومان</p>
             </div>
 
             <div>
@@ -55,14 +53,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">موجودی:</span>
-              <span className={`font-semibold ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
-                {product.stock > 0 ? `${product.stock} عدد` : "ناموجود"}
-              </span>
-            </div>
-
-            {product.stock > 0 && <AddToCartButton productId={product.id} />}
+            <PhoneCaseSelector productId={product.id} phoneCases={phoneCases || []} />
           </div>
         </div>
       </main>
