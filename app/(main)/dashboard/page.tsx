@@ -63,7 +63,7 @@ export default async function DashboardPage() {
     .select("*")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
-    .limit(5);
+    .limit(3);
 
   const formatPrice = (v: number | null | undefined): string =>
     new Intl.NumberFormat("fa-IR").format(v ?? 0) + " تومان";
@@ -198,16 +198,11 @@ export default async function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <div className="text-center space-y-4">
+                <div className="text-center space-y-2 pb-4">
                   <div className="h-16 w-16 bg-muted/20 rounded-2xl flex items-center justify-center mx-auto">
                     <Sparkles className="h-8 w-8 text-muted-foreground" />
                   </div>
-                  <div className="space-y-2">
-                    <p className="font-semibold">کد تخفیف نداری!</p>
-                    <p className="text-sm text-muted-foreground">
-                      کد تخفیفی برای شما پیدا نشد
-                    </p>
-                  </div>
+                  <p className="font-semibold">کد تخفیف نداری!</p>
                 </div>
               </CardContent>
             </Card>
@@ -222,7 +217,6 @@ export default async function DashboardPage() {
                     <ShoppingBag className="h-5 w-5" />
                     سفارش‌ها
                   </CardTitle>
-                  <CardDescription>۵ سفارش آخر شما</CardDescription>
                 </div>
                 <Button
                   asChild
@@ -324,7 +318,7 @@ function OrderItem({
   });
 
   return (
-    <div className="flex items-center justify-between p-4 rounded-2xl border border-border/50 bg-white/50 hover:bg-white hover:shadow-md transition-all duration-200 group">
+    <div className="flex items-center justify-between p-4 rounded-2xl border bg-card hover:bg-background/20 hover:shadow-md transition-all duration-200 group">
       <div className="flex items-center gap-4 flex-1">
         <div
           className={`h-12 w-12 rounded-xl flex items-center justify-center shadow-sm ${
@@ -342,11 +336,11 @@ function OrderItem({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <p className="font-mono text-sm font-semibold bg-slate-100 px-2 py-1 rounded-lg">
+            <p className="font-mono text-sm font-semibold bg-zinc-800 px-2 py-1 rounded-lg">
               #{order.id.slice(0, 8).toUpperCase()}
             </p>
             <span
-              className={`text-xs px-2 py-1 rounded-full ${
+              className={`text-xs px-2 py-1 rounded-lg ${
                 order.payment_status === "paid"
                   ? "bg-green-100 text-green-600"
                   : "bg-yellow-100 text-yellow-600"
@@ -360,7 +354,7 @@ function OrderItem({
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <CalendarDays className="h-3 w-3" />
             <span>{date}</span>
-            <span>•</span>
+            <span>-</span>
             <span>{time}</span>
           </div>
         </div>

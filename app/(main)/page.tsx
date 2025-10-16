@@ -19,6 +19,7 @@ export default async function HomePage() {
               href={`/phonecase/${product.id}`}
               image_url={product.image_url}
               name={product.name}
+              size="big"
             />
           ))}
         </div>

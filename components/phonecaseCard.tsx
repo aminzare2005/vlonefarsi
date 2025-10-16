@@ -1,25 +1,31 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function PhonecaseCard({
-  href,
-  image_url,
-  name,
-}: {
+type Props = {
   href?: string;
   image_url?: string;
   name?: string;
-}) {
+  size: "small" | "big";
+};
+
+function PhonecaseCard(props: Props) {
   return (
-    <div className="aspect-[9/18] hover:scale-101 w-full border border-stone-700 duration-300 bg-stone-900 rounded-2xl overflow-hidden relative cursor-pointer">
-      <Link className="h-full w-full" href={href || ""}>
+    <div
+      className={cn(
+        "aspect-[9/18] hover:scale-101 w-full border border-stone-700 duration-300 bg-stone-900 overflow-hidden relative cursor-pointer",
+        props.size === "small" && "rounded-lg",
+        props.size === "big" && "rounded-4xl"
+      )}
+    >
+      <Link className="h-full w-full" href={props.href || ""}>
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
             width={120}
             height={120}
-            src={image_url || "/images/card-default.jpg"}
-            alt={name || "قاب موبایل"}
+            src={props.image_url || "/images/card-default.jpg"}
+            alt={props.name || "قاب موبایل"}
             loading="lazy"
             className="h-full w-full object-cover"
           />

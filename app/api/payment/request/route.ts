@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        merchant: process.env.ZIBAL_MERCHANT_ID || "zibal",
+        merchant: "zibal",
         amount: amount * 10, // Convert to Rials (Toman * 10)
         callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/payment/verify`,
         description: `پرداخت سفارش ${orderId}`,
@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
     })
 
     const data = await zibalResponse.json()
+    console.log("[v0] Zibal raw response:", data)
 
     if (data.result === 100) {
       return NextResponse.json({

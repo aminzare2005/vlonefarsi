@@ -97,7 +97,7 @@ export function CartItem({
         <div className="flex justify-between items-center gap-2">
           <div className="flex gap-3">
             <div className="h-auto w-16 relative">
-              <PhonecaseCard image_url={image_url} />
+              <PhonecaseCard size="small" image_url={image_url} />
             </div>
             <div className="h-full">
               <h2 className="font-semibold">{name}</h2>

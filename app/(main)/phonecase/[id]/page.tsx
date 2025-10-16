@@ -34,7 +34,7 @@ export default async function ProductPage({
         <div className="w-full md:w-1/3">
           <div className="pointer-events-none flex items-center justify-center p-4 md:p-0">
             <div className="w-1/2 md:w-full">
-              <PhonecaseCard image_url={product.image_url} />
+              <PhonecaseCard size="big" image_url={product.image_url} />
             </div>
           </div>
         </div>

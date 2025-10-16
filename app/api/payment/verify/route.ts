@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          merchant: process.env.ZIBAL_MERCHANT_ID || "zibal",
+          merchant: "zibal",
           trackId: trackId,
         }),
       })
