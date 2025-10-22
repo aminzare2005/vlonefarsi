@@ -14,9 +14,5 @@ export default async function MePage() {
     .select("*")
     .eq("id", user.id)
     .single();
-  return (
-    <main className="py-8">
-      <ProfileForm profile={profile} />
-    </main>
-  );
+  return <ProfileForm profile={profile} />;
 }

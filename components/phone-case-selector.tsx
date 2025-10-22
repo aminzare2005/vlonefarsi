@@ -14,6 +14,8 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { TomanIcon } from "./toman.icon";
+import { cn } from "@/lib/utils";
 
 type PhoneCase = {
   id: string;
@@ -157,15 +159,14 @@ export function PhoneCaseSelector({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-2">
       <div>
         <div className="flex md:flex-row flex-col items-center justify-center gap-2 w-full">
           {/* Brand Selection */}
           <div className="space-y-2 w-full">
-            <Label htmlFor="brand-select">برند</Label>
             <Select value={selectedBrand} onValueChange={handleBrandChange}>
               <SelectTrigger id="brand-select">
-                <SelectValue placeholder="برند گوشی خود را انتخاب کنید" />
+                <SelectValue placeholder="برند گوشیت رو انتخاب کن" />
               </SelectTrigger>
               <SelectContent>
                 {brands.map((brand) => (
@@ -179,14 +180,13 @@ export function PhoneCaseSelector({
 
           {/* Model Selection */}
           <div className="space-y-2 w-full">
-            <Label htmlFor="model-select">مدل</Label>
             <Select
               disabled={!selectedBrand}
               value={selectedPhoneCaseId}
               onValueChange={setSelectedPhoneCaseId}
             >
               <SelectTrigger id="model-select">
-                <SelectValue placeholder="مدل گوشی خود را انتخاب کنید" />
+                <SelectValue placeholder="مدل گوشیت رو انتخاب کن" />
               </SelectTrigger>
               <SelectContent>
                 {brandPhoneCases.map((phoneCase) => (
@@ -196,13 +196,10 @@ export function PhoneCaseSelector({
                     disabled={!phoneCase.available}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span>
+                      <span
+                        className={cn(!phoneCase.available && "line-through")}
+                      >
                         {phoneCase.model}
-                        {!phoneCase.available && (
-                          <span className="mr-2 text-xs text-red-600">
-                            (ناموجود)
-                          </span>
-                        )}
                       </span>
                     </div>
                   </SelectItem>
@@ -213,34 +210,42 @@ export function PhoneCaseSelector({
         </div>
       </div>
 
-      {/* Price Section */}
-      {selectedPhoneCase && (
-        <div className="rounded-lg bg-muted p-4">
+      <div className="fixed md:static bottom-3 right-3 left-3 p-4 backdrop-blur-sm bg-background/50 md:bg-card border rounded-xl">
+        {/* Price Section */}
+        <div className="mb-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">قیمت نهایی:</span>
-            <span className="text-2xl font-bold text-primary">
-              {new Intl.NumberFormat("fa-IR").format(selectedPhoneCase.price)}{" "}
-              تومان
+            <span className="text-sm text-muted-foreground">قیمت:</span>
+            <span className="text-2xl font-bold text-primary min-h-8">
+              {selectedPhoneCase ? (
+                <div className="gap-1 inline-flex items-center">
+                  {new Intl.NumberFormat("fa-IR").format(
+                    selectedPhoneCase.price
+                  )}
+                  <TomanIcon className="size-4" />
+                </div>
+              ) : (
+                ""
+              )}
             </span>
           </div>
         </div>
-      )}
 
-      <Button
-        onClick={handleAddToCart}
-        disabled={!selectedBrand || !selectedPhoneCaseId || isLoading}
-        className="w-full"
-        size="lg"
-      >
-        {isLoading ? (
-          <>
-            <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-            در حال افزودن...
-          </>
-        ) : (
-          "افزودن به سبد خرید"
-        )}
-      </Button>
+        <Button
+          onClick={handleAddToCart}
+          disabled={!selectedBrand || !selectedPhoneCaseId || isLoading}
+          className="w-full"
+          size="lg"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+              در حال افزودن...
+            </>
+          ) : (
+            "افزودن به سبد خرید"
+          )}
+        </Button>
+      </div>
     </div>
   );
 }

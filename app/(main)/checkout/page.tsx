@@ -53,7 +53,7 @@ export default async function CheckoutPage() {
   const formattedTotal = new Intl.NumberFormat("fa-IR").format(total);
 
   return (
-    <main className="container py-8">
+    <>
       <h1 className="mb-8 text-3xl font-bold">تکمیل سفارش</h1>
 
       <div className="grid gap-8 lg:grid-cols-3">
@@ -119,6 +119,6 @@ export default async function CheckoutPage() {
           </Card>
         </div>
       </div>
-    </main>
+    </>
   );
 }

@@ -6,9 +6,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <Header />
-      <main className="mx-auto pt-24 pb-8 px-4 max-w-5xl">{children}</main>
-    </>
+    <main className="mx-auto p-4 max-w-2xl min-h-dvh flex items-center justify-center">
+      {children}
+    </main>
   );
 }
