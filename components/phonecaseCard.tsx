@@ -16,7 +16,7 @@ function PhonecaseCard(props: Props) {
       className={cn(
         "aspect-[9/18] hover:scale-101 w-full border border-stone-700 duration-300 bg-stone-900 overflow-hidden relative cursor-pointer",
         props.size === "small" && "rounded-lg",
-        props.size === "big" && "rounded-4xl"
+        props.size === "big" && "rounded-3xl md:rounded-4xl"
       )}
     >
       <Link className="h-full w-full" href={props.href || ""}>

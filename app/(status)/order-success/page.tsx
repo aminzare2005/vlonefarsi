@@ -31,9 +31,9 @@ export default async function OrderSuccessPage({
   );
 
   return (
-    <main className="container min-h-screen flex items-center justify-center py-8">
+    <div className="w-full">
       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-green-500/10 to-background h-80 -z-50" />
-      <div className="mx-auto max-w-2xl w-full">
+      <div className="w-full">
         <div className="shadow-lg overflow-hidden">
           {/* Header with gradient background */}
           <div className="pb-8">
@@ -109,7 +109,9 @@ export default async function OrderSuccessPage({
                 asChild
                 className="bg-foreground text-background shadow-md hover:shadow-lg transition-all duration-200"
               >
-                <Link href="/dashboard/orders">مشاهده سفارشات</Link>
+                <Link href={`/dashboard/orders/${searchParams.orderId}`}>
+                  مشاهده سفارش
+                </Link>
               </Button>
               <Button
                 asChild
@@ -122,6 +124,6 @@ export default async function OrderSuccessPage({
           </CardContent>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

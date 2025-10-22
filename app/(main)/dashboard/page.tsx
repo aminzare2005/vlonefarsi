@@ -74,9 +74,9 @@ export default async function DashboardPage() {
     0;
 
   return (
-    <main className="min-h-screen pb-4">
+    <>
       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-violet-500/10 to-background h-80 -z-50" />
-      <div className="container mx-auto max-w-7xl">
+      <div className="">
         {/* Quick Actions */}
         <div className="mb-4">
           <Card className="border-0 shadow-lg rounded-3xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
@@ -114,6 +114,32 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        {user.email === "cwpslxck@gmail.com" && (
+          <Card className="border-0 mb-4 shadow-xl rounded-3xl overflow-hidden">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Shield className="h-5 w-5 text-blue-500" />
+                پنل ادمین
+              </CardTitle>
+              <CardDescription>فقط مخصوص مدیر سایت</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                این بخش فقط برای ادمین قابل مشاهده است.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Button asChild className="rounded-xl">
+                  <Link href="/dashboard/admin/users">مدیریت کاربران</Link>
+                </Button>
+                <Button asChild className="rounded-xl">
+                  <Link href="/dashboard/admin/orders">مدیریت سفارش‌ها</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Stats Grid - Improved with better visuals */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -263,7 +289,7 @@ export default async function DashboardPage() {
           </section>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 

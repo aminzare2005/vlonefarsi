@@ -22,9 +22,9 @@ export default async function OrderFailedPage({
   );
 
   return (
-    <main className="container min-h-screen flex items-center justify-center py-8">
+    <div className="w-full">
       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-red-500/10 to-background h-80 -z-50" />
-      <div className="mx-auto max-w-2xl w-full">
+      <div className="w-full">
         <div className="shadow-lg overflow-hidden">
           {/* Header with gradient background */}
           <div className="pb-8">
@@ -90,16 +90,18 @@ export default async function OrderFailedPage({
               </div>
             </div>
             <p className="text-sm text-center text-muted-foreground mt-2">
-              اگه مبلغ از حسابت کم شد یا نیاز به کمک داری بهمون پیام بده.
+              اگه مبلغی از حسابت کم شده، تا ۷۲ ساعت دیگه به حسابت برمیگرده.
+              <br />
+              درصورتی که به کمک نیاز داری میتونی با پشتیبانی در ارتباط باشی.
             </p>
 
             {/* Action buttons */}
             <div className="grid grid-cols-2 gap-3 pt-2">
               <Button
                 asChild
-                className="bg-foreground text-background hover:from-green-600 hover:to-emerald-600 shadow-md hover:shadow-lg transition-all duration-200"
+                className="bg-foreground text-background shadow-md hover:shadow-lg transition-all duration-200"
               >
-                <Link href="/dashboard/orders">تماس با پشتیبانی</Link>
+                <Link href="/support">تماس با پشتیبانی</Link>
               </Button>
               <Button
                 asChild
@@ -112,6 +114,6 @@ export default async function OrderFailedPage({
           </CardContent>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

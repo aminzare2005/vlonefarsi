@@ -35,7 +35,7 @@ export default async function OrdersPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <main className="container py-8">
+    <>
       <div className="mb-8 flex items-center gap-4">
         <Button variant="ghost" asChild>
           <Link href="/dashboard">
@@ -152,6 +152,6 @@ export default async function OrdersPage() {
           ))}
         </div>
       )}
-    </main>
+    </>
   );
 }
