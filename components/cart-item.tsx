@@ -92,15 +92,15 @@ export function CartItem({
   };
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardContent dir="ltr" className="px-4">
         <div className="flex justify-between items-center gap-2">
           <div className="flex gap-3">
-            <div className="h-auto w-16 relative">
+            <div className="h-auto w-16 pointer-events-none relative">
               <PhonecaseCard size="small" image_url={image_url} />
             </div>
             <div className="h-full">
-              <h2 className="font-semibold">{name}</h2>
+              <h2 className="text-xl font-semibold">{name}</h2>
               <p className="text-sm text-muted-foreground">
                 {phoneBrand} {phoneModel}
               </p>

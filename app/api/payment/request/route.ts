@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     })
 
     const data = await zibalResponse.json()
-    console.log("[v0] Zibal raw response:", data)
+    console.log("[Zibal raw response:", data)
 
     if (data.result === 100) {
       return NextResponse.json({
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       )
     }
   } catch (error) {
-    console.error("[v0] Payment request error:", error)
+    console.error("Payment request error:", error)
     return NextResponse.json(
       {
         success: false,

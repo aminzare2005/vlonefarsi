@@ -1,45 +1,45 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
-import { createClient } from "@/lib/supabase/client"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { createClient } from "@/lib/supabase/client";
 
 interface CheckoutFormProps {
-  profile: any
-  total: number
+  profile: any;
+  total: number;
 }
 
 export function CheckoutForm({ profile, total }: CheckoutFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     displayName: profile?.display_name || "",
     phoneNumber: profile?.phone_number || "",
     address: profile?.address || "",
     city: profile?.city || "",
     postalCode: profile?.postal_code || "",
-  })
+  });
 
-  const router = useRouter()
-  const { toast } = useToast()
-  const supabase = createClient()
+  const router = useRouter();
+  const { toast } = useToast();
+  const supabase = createClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser()
+      } = await supabase.auth.getUser();
 
-      if (!user) throw new Error("User not authenticated")
+      if (!user) throw new Error("User not authenticated");
 
       const { data: cartItems } = await supabase
         .from("cart_items")
@@ -56,12 +56,12 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
             model,
             price
           )
-        `,
+        `
         )
-        .eq("user_id", user.id)
+        .eq("user_id", user.id);
 
       if (!cartItems || cartItems.length === 0) {
-        throw new Error("Cart is empty")
+        throw new Error("Cart is empty");
       }
 
       // Create order
@@ -78,9 +78,9 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           phone_number: formData.phoneNumber,
         })
         .select()
-        .single()
+        .single();
 
-      if (orderError) throw orderError
+      if (orderError) throw orderError;
 
       const orderItems = cartItems.map((item: any) => ({
         order_id: order.id,
@@ -91,11 +91,13 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         phone_case_id: item.phone_cases.id,
         phone_brand: item.phone_cases.brand,
         phone_model: item.phone_cases.model,
-      }))
+      }));
 
-      const { error: itemsError } = await supabase.from("order_items").insert(orderItems)
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItems);
 
-      if (itemsError) throw itemsError
+      if (itemsError) throw itemsError;
 
       // Update profile with shipping info
       await supabase
@@ -107,7 +109,7 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           city: formData.city,
           postal_code: formData.postalCode,
         })
-        .eq("id", user.id)
+        .eq("id", user.id);
 
       // Initialize Zibal payment
       const response = await fetch("/api/payment/request", {
@@ -117,97 +119,113 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           orderId: order.id,
           amount: total,
         }),
-      })
+      });
 
-      const paymentData = await response.json()
+      const paymentData = await response.json();
 
       if (paymentData.success && paymentData.trackId) {
         // Update order with payment reference
-        await supabase.from("orders").update({ payment_reference: paymentData.trackId }).eq("id", order.id)
+        await supabase
+          .from("orders")
+          .update({ payment_reference: paymentData.trackId })
+          .eq("id", order.id);
 
         // Redirect to Zibal payment gateway
-        window.location.href = `https://gateway.zibal.ir/start/${paymentData.trackId}`
+        window.location.href = `https://gateway.zibal.ir/start/${paymentData.trackId}`;
       } else {
-        throw new Error("Payment initialization failed")
+        throw new Error("Payment initialization failed");
       }
     } catch (error) {
-      console.error("[v0] Checkout error:", error)
+      console.error("Checkout error:", error);
       toast({
         title: "خطا",
         description: "مشکلی در ثبت سفارش پیش آمد. لطفاً دوباره تلاش کنید.",
         variant: "destructive",
-      })
-      setIsLoading(false)
+      });
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>اطلاعات ارسال</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="displayName">نام و نام خانوادگی</Label>
-              <Input
-                id="displayName"
-                required
-                value={formData.displayName}
-                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-              />
-            </div>
+    <form onSubmit={handleSubmit}>
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="displayName">نام و نام خانوادگی</Label>
+          <Input
+            id="displayName"
+            required
+            dir="auto"
+            value={formData.displayName}
+            onChange={(e) =>
+              setFormData({ ...formData, displayName: e.target.value })
+            }
+          />
+        </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="phoneNumber">شماره تماس</Label>
-              <Input
-                id="phoneNumber"
-                type="tel"
-                required
-                placeholder="09123456789"
-                value={formData.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-              />
-            </div>
+        <div className="grid gap-2">
+          <Label htmlFor="phoneNumber">شماره تماس</Label>
+          <Input
+            id="phoneNumber"
+            type="tel"
+            required
+            dir="ltr"
+            placeholder="09123456789"
+            value={formData.phoneNumber}
+            onChange={(e) =>
+              setFormData({ ...formData, phoneNumber: e.target.value })
+            }
+          />
+        </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="city">شهر</Label>
-              <Input
-                id="city"
-                required
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-              />
-            </div>
+        <div className="grid gap-2">
+          <Label htmlFor="city">شهر</Label>
+          <Input
+            id="city"
+            required
+            dir="auto"
+            value={formData.city}
+            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+          />
+        </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="address">آدرس کامل</Label>
-              <Input
-                id="address"
-                required
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              />
-            </div>
+        <div className="grid gap-2">
+          <Label htmlFor="address">آدرس کامل</Label>
+          <Input
+            id="address"
+            required
+            dir="auto"
+            value={formData.address}
+            onChange={(e) =>
+              setFormData({ ...formData, address: e.target.value })
+            }
+          />
+        </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="postalCode">کد پستی</Label>
-              <Input
-                id="postalCode"
-                required
-                placeholder="1234567890"
-                value={formData.postalCode}
-                onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-              />
-            </div>
-          </div>
+        <div className="grid gap-2">
+          <Label htmlFor="postalCode">کد پستی</Label>
+          <Input
+            id="postalCode"
+            required
+            dir="ltr"
+            placeholder="1234567890"
+            value={formData.postalCode}
+            onChange={(e) =>
+              setFormData({ ...formData, postalCode: e.target.value })
+            }
+          />
+        </div>
+      </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-            {isLoading ? "در حال پردازش..." : "پرداخت و ثبت نهایی سفارش"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
-  )
+      <div className="fixed md:static bottom-3 right-3 left-3 p-4 md:p-0 md:mt-4 backdrop-blur-sm bg-background/50 md:bg-transparent border md:border-0 rounded-xl">
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          size="lg"
+          disabled={isLoading}
+        >
+          {isLoading ? "در حال پردازش..." : "پرداخت و ثبت نهایی سفارش"}
+        </Button>
+      </div>
+    </form>
+  );
 }

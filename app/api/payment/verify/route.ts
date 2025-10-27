@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL(`/order-success?orderId=${orderId}`, request.url))
       }
     } catch (error) {
-      console.error("[v0] Payment verification error:", error)
+      console.error("Payment verification error:", error)
     }
   }
 

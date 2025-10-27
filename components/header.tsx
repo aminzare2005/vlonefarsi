@@ -60,7 +60,7 @@ export default function Header() {
             isMenuOpen && "bg-transparent backdrop-blur-none border-transparent"
           )}
         >
-          <div className="container flex h-16 items-center justify-between px-6">
+          <div className="flex w-full h-16 items-center justify-between px-6">
             <div className="inline-flex items-center gap-1">
               <button
                 onClick={toggleMenu}
