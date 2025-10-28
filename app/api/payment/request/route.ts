@@ -11,9 +11,9 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        merchant: "zibal",
-        amount: amount * 10, // Convert to Rials (Toman * 10)
-        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/payment/verify`,
+        merchant: process.env.ZIBAL_MERCHANT_ID,
+        amount: amount * 1000 * 10, // Convert to Rials and hezar
+        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/payment/verify`,
         description: `پرداخت سفارش ${orderId}`,
         orderId: orderId,
       }),
