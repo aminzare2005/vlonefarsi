@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         merchant: process.env.ZIBAL_MERCHANT_ID,
-        amount: amount * 1000 * 10, // Convert to Rials and hezar
+        amount: amount * 10, // Convert to Rials
         callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/payment/verify`,
         description: `پرداخت سفارش ${orderId}`,
         orderId: orderId,

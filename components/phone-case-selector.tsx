@@ -14,7 +14,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { TomanIcon } from "./toman.icon";
 import { cn } from "@/lib/utils";
 
 type PhoneCase = {
@@ -217,11 +216,11 @@ export function PhoneCaseSelector({
             <span className="text-sm text-muted-foreground">قیمت:</span>
             <span className="text-2xl font-bold text-primary min-h-8">
               {selectedPhoneCase ? (
-                <div className="gap-1 inline-flex items-center">
+                <div className="gap-1 text-xl inline-flex items-center">
                   {new Intl.NumberFormat("fa-IR").format(
                     selectedPhoneCase.price
                   )}
-                  <TomanIcon className="size-4" />
+                  تومان
                 </div>
               ) : (
                 ""
