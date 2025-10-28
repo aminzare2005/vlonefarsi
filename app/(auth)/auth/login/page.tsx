@@ -1,7 +1,5 @@
 "use client";
 
-import type React from "react";
-
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +13,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ backTo: string }>;
+}) {
+  // Unwrap searchParams with React.use()
+  const resolvedSearchParams = use(searchParams);
+  const backTo = resolvedSearchParams?.backTo;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +42,7 @@ export default function LoginPage() {
         password,
       });
       if (error) throw error;
-      router.push("/");
+      router.push(backTo ? `/phonecase/${backTo}` : "/phonecase");
       router.refresh();
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "خطایی رخ داده است");
@@ -47,7 +53,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className="flex min-h-svh w-full items-center justify-center p-6 md:p-10"
+      className="flex min-h-dvh w-full items-center justify-center p-6 md:p-10"
       dir="rtl"
     >
       <div className="w-full max-w-sm">
@@ -91,7 +97,9 @@ export default function LoginPage() {
                 <div className="mt-4 text-center text-sm">
                   اکانت نداری؟{" "}
                   <Link
-                    href="/auth/signup"
+                    href={
+                      backTo ? `/auth/signup?backTo=${backTo}` : "/auth/signup"
+                    }
                     className="underline underline-offset-4"
                   >
                     ثبت نام کن

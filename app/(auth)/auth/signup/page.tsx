@@ -1,7 +1,5 @@
 "use client";
 
-import type React from "react";
-
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +13,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 
-export default function SignupPage() {
+export default function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ backTo: string }>;
+}) {
+  // Unwrap searchParams with React.use()
+  const resolvedSearchParams = use(searchParams);
+  const backTo = resolvedSearchParams?.backTo;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -43,16 +49,13 @@ export default function SignupPage() {
         email,
         password,
         options: {
-          emailRedirectTo:
-            process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
-            `${window.location.origin}/dashboard`,
           data: {
             display_name: displayName,
           },
         },
       });
       if (error) throw error;
-      router.push("/auth/signup-success");
+      router.push(backTo ? `/phonecase/${backTo}` : "/");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "خطایی رخ داده است");
     } finally {
@@ -62,7 +65,7 @@ export default function SignupPage() {
 
   return (
     <div
-      className="flex min-h-svh w-full items-center justify-center p-6 md:p-10"
+      className="flex min-h-dvh w-full items-center justify-center p-6 md:p-10"
       dir="rtl"
     >
       <div className="w-full max-w-sm">
@@ -131,7 +134,9 @@ export default function SignupPage() {
                 <div className="mt-4 text-center text-sm">
                   اکانت داری؟{" "}
                   <Link
-                    href="/auth/login"
+                    href={
+                      backTo ? `/auth/login?backTo=${backTo}` : "/auth/login"
+                    }
                     className="underline underline-offset-4"
                   >
                     وارد شو

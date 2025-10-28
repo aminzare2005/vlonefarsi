@@ -110,7 +110,7 @@ export function PhoneCaseSelector({
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/auth/login");
+        router.push(`/auth/login?backTo=${productId}`);
         return;
       }
 

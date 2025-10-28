@@ -58,7 +58,7 @@ export default async function CartCheckoutPage() {
   const formattedTotal = new Intl.NumberFormat("fa-IR").format(total);
 
   return (
-    <div className="max-w-xl mx-auto space-y-12">
+    <div className="max-w-xl mx-auto flex flex-col items-center gap-8">
       <div className="flex flex-col gap-4 items-center w-full">
         {cartItems.map((item: any) => (
           <CartItem
@@ -74,28 +74,28 @@ export default async function CartCheckoutPage() {
             available={item.phone_cases.available}
           />
         ))}
-
-        <div className="flex flex-col w-full gap-1 pt-2 border-t">
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-muted-foreground">جمع خرید:</p>
-            <p className="font-medium">{formattedSubtotal} تومان</p>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-muted-foreground">هزینه ارسال:</p>
-            <p className="font-medium">{formattedPostPrice} تومان</p>
-          </div>
-          <div className="flex justify-between items-center border-t pt-2 mt-1">
-            <p className="font-semibold text-lg">مجموع نهایی:</p>
-            <p className="text-xl font-bold">{formattedTotal} تومان</p>
-          </div>
-        </div>
       </div>
 
-      <div className="from-violet-800/30 to-blue-800/30 bg-gradient-to-br px-4 py-6 rounded-2xl md:mb-0 mb-16">
+      <div className="from-violet-800/30 to-blue-800/30 bg-gradient-to-br px-4 py-6 rounded-2xl w-full">
         <h1 className="text-3xl text-center font-bold mb-4">
           سفارشت رو کجا بفرستیم؟
         </h1>
         <CheckoutForm profile={profile} total={total} />
+      </div>
+
+      <div className="flex flex-col w-full gap-1 md:mb-0 mb-20">
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-muted-foreground">جمع خرید:</p>
+          <p className="font-medium">{formattedSubtotal} تومان</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-muted-foreground">هزینه ارسال (با پست):</p>
+          <p className="font-medium">{formattedPostPrice} تومان</p>
+        </div>
+        <div className="flex justify-between items-center border-t pt-2 mt-1">
+          <p className="font-semibold text-lg">مجموع نهایی:</p>
+          <p className="text-xl font-bold">{formattedTotal} تومان</p>
+        </div>
       </div>
     </div>
   );
