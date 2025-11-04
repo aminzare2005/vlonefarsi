@@ -1,3 +1,5 @@
+"use client";
+
 import { CctvIcon, RefreshCcwIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -8,28 +10,37 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "./ui/empty";
+import { ReactElement } from "react";
+import { useRouter } from "next/navigation";
 
-function EmptyCommon() {
+type Props = {
+  title?: string;
+  description?: string;
+  button?: string;
+  isButton?: boolean;
+  buttonIcon?: ReactElement;
+  icon?: ReactElement;
+};
+
+function EmptyCommon(props: Props) {
+  const router = useRouter();
   return (
-    <Empty className="min-h-[70dvh]">
+    <Empty>
       <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <CctvIcon />
-        </EmptyMedia>
-        <EmptyTitle>یه مشکلی پیش اومده!</EmptyTitle>
+        <EmptyMedia variant="icon">{props.icon || <CctvIcon />}</EmptyMedia>
+        <EmptyTitle>{props.title || "یه مشکلی پیش اومده!"}</EmptyTitle>
         <EmptyDescription>
-          نتونستیم دیتایی دریافت کنیم لطفا چند ثانیه دیگه دوباره امتحان کن
+          {(props.description && props.description) ||
+            "نتونستیم دیتا رو بگیریم. صفحه رو ریفرش کن و دوباره امتحان کن"}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button
-          onClick={() => window.location.reload()}
-          variant="outline"
-          size="sm"
-        >
-          <RefreshCcwIcon />
-          رفرش
-        </Button>
+        {props.isButton && (
+          <Button onClick={() => router.push("/")} variant="outline" size="sm">
+            {props.buttonIcon || <RefreshCcwIcon />}
+            {props.button || "ریفرش"}
+          </Button>
+        )}
       </EmptyContent>
     </Empty>
   );

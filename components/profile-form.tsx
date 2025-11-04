@@ -226,7 +226,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-md rounded-2xl border bg-card p-6 shadow-sm space-y-6"
+      className="rounded-2xl border bg-card p-6 shadow-sm space-y-6"
     >
       <h2 className="text-lg font-semibold text-center mb-2">ویرایش پروفایل</h2>
       <p className="text-center text-sm text-muted-foreground mb-4">

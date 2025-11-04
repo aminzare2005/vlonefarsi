@@ -5,6 +5,7 @@ import { User, ShoppingBasketIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,73 +54,71 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed md:top-4 top-2 left-3 right-3 md:right-auto md:left-1/2 md:-translate-x-1/2 z-50 md:w-[95%] max-w-4xl">
-        <div
-          className={cn(
-            "rounded-full backdrop-blur-md bg-background/50 border border-border/80",
-            isMenuOpen && "bg-transparent backdrop-blur-none border-transparent"
-          )}
-        >
-          <div className="flex w-full h-16 items-center justify-between px-6">
-            <div className="inline-flex items-center gap-1">
-              <button
-                onClick={toggleMenu}
-                className="relative w-8 h-8 flex items-center justify-center group cursor-pointer"
-                aria-label="Menu"
-              >
-                <span
-                  className={cn(
-                    "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-300",
-                    isMenuOpen
-                      ? "rotate-45 translate-y-[0px]"
-                      : "-translate-y-1.5 group-hover:-translate-y-2"
-                  )}
-                ></span>
-                <span
-                  className={cn(
-                    "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-300",
-                    isMenuOpen
-                      ? "opacity-0 scale-x-0"
-                      : "opacity-100 group-hover:scale-x-95"
-                  )}
-                ></span>
-                <span
-                  className={cn(
-                    "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-300",
-                    isMenuOpen
-                      ? "-rotate-45 -translate-y-[0px]"
-                      : "translate-y-1.5 group-hover:translate-y-2"
-                  )}
-                ></span>
-              </button>
+      <header
+        className={cn(
+          "fixed max-w-2xl h-16 mx-auto flex flex-row items-center gap-2 top-4 right-4 left-4 z-20 px-4 backdrop-blur-sm bg-background/50 border border-input rounded-full",
+          isMenuOpen && "bg-transparent backdrop-blur-none border-transparent"
+        )}
+      >
+        <div className="flex w-full h-16 items-center justify-between">
+          <div className="inline-flex items-center gap-1">
+            <Button
+              onClick={toggleMenu}
+              className="relative flex items-center justify-center group cursor-pointer hover:!bg-transparent"
+              aria-label="Menu"
+              variant={"ghost"}
+              size={"icon"}
+            >
+              <span
+                className={cn(
+                  "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-300",
+                  isMenuOpen
+                    ? "rotate-45 translate-y-[0px]"
+                    : "-translate-y-1.5 group-hover:-translate-y-2"
+                )}
+              ></span>
+              <span
+                className={cn(
+                  "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-300",
+                  isMenuOpen
+                    ? "opacity-0 scale-x-0"
+                    : "opacity-100 group-hover:scale-x-95"
+                )}
+              ></span>
+              <span
+                className={cn(
+                  "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-300",
+                  isMenuOpen
+                    ? "-rotate-45 -translate-y-[0px]"
+                    : "translate-y-1.5 group-hover:translate-y-2"
+                )}
+              ></span>
+            </Button>
 
-              <Link
-                href="/"
-                className="flex items-center gap-1.5 font-bold text-lg"
-              >
-                <span>ویلون فارسی</span>
-              </Link>
-            </div>
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 font-bold text-lg"
+            >
+              <h1>ویلون فارسی</h1>
+            </Link>
+          </div>
 
-            <div className="flex gap-2 items-center relative">
-              <Link
-                href={"/cart"}
-                className="overflow-visible rounded-md hover:bg-foreground/10 duration-200 p-1 flex justify-center items-center"
-              >
+          <div className="flex gap-0.5 items-center relative">
+            <Link href={"/cart"}>
+              <Button variant={"ghost"} size={"icon"}>
                 <ShoppingBasketIcon className="size-6" />
-              </Link>
-              <Link
-                href="/dashboard"
-                className="overflow-visible rounded-md hover:bg-foreground/10 duration-200 p-1 flex justify-center items-center"
-              >
+              </Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button variant={"ghost"} size={"icon"}>
                 <User className="size-6" />
-              </Link>
-            </div>
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
       {isMenuOpen && (
-        <div className="fixed inset-0 z-40">
+        <div className="fixed inset-0 z-10">
           <div
             className="absolute inset-0 bg-background/50 backdrop-blur-md"
             onClick={() => setIsMenuOpen(false)}

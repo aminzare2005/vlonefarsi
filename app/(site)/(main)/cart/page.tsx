@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { CartItem } from "@/components/cart-item";
 import { CheckoutForm } from "@/components/checkout-form";
 import { redirect } from "next/navigation";
+import EmptyCommon from "@/components/empty-common";
+import { ArrowLeftIcon } from "lucide-react";
 
 export default async function CartCheckoutPage() {
   const supabase = await createClient();
@@ -27,10 +29,12 @@ export default async function CartCheckoutPage() {
 
   if (!cartItems || cartItems.length === 0) {
     return (
-      <div className="py-8 max-w-xl mx-auto text-center">
-        <div className="text-6xl mb-4">🛒🥀</div>
-        <p className="text-lg text-muted-foreground mb-2">سبد خرید خالیه</p>
-      </div>
+      <EmptyCommon
+        title="سبد خرید شما خالی است"
+        description="یه محصول جدید انتخاب کن و به سبدت اضافه کن"
+        button="بازگشت به صفحه اصلی"
+        buttonIcon={<ArrowLeftIcon />}
+      />
     );
   }
 
@@ -94,7 +98,9 @@ export default async function CartCheckoutPage() {
         </div>
         <div className="flex justify-between items-center border-t pt-2 mt-1">
           <p className="font-semibold text-lg">مجموع نهایی:</p>
-          <p className="text-xl font-bold">{formattedTotal} تومان</p>
+          <p className="text-2xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+            {formattedTotal} تومان
+          </p>
         </div>
       </div>
     </div>

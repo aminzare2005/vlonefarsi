@@ -75,34 +75,30 @@ export default function ProductGrid({
     setIsLoading(false);
   }
 
-  const isEmpty = !products || products.length === 0;
+  if (!products || products.length === 0) {
+    return <EmptyCommon description="" />;
+  }
 
   return (
-    <div className="space-y-4">
-      {isEmpty ? (
-        <EmptyCommon />
-      ) : (
-        <>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {products.map((product) => (
-              <PhonecaseCard
-                key={product.id}
-                href={`/phonecase/${product.id}`}
-                image_url={product.image_url}
-                name={product.name}
-                size="big"
-              />
-            ))}
+    <>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {products.map((product) => (
+          <PhonecaseCard
+            key={product.id}
+            href={`/phonecase/${product.id}`}
+            image_url={product.image_url}
+            name={product.name}
+            size="big"
+          />
+        ))}
 
-            {isLoading &&
-              Array.from({ length: 4 }).map((_, idx) => (
-                <PhonecaseCardSkeleton size="big" key={idx} />
-              ))}
-          </div>
+        {isLoading &&
+          Array.from({ length: 4 }).map((_, idx) => (
+            <PhonecaseCardSkeleton size="big" key={idx} />
+          ))}
+      </div>
 
-          <div ref={ref} />
-        </>
-      )}
-    </div>
+      <div ref={ref} />
+    </>
   );
 }

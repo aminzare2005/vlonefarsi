@@ -22,6 +22,7 @@ type PhoneCase = {
   model: string;
   price: number;
   available: boolean;
+  created_at: string;
 };
 
 type PhoneCaseSelectorProps = {
@@ -40,12 +41,18 @@ export function PhoneCaseSelector({
   const { toast } = useToast();
   const supabase = createClient();
 
-  // Group phone cases by brand
   const groupedPhoneCases = phoneCases.reduce((acc, phoneCase) => {
     if (!acc[phoneCase.brand]) acc[phoneCase.brand] = [];
     acc[phoneCase.brand].push(phoneCase);
     return acc;
   }, {} as Record<string, PhoneCase[]>);
+
+  for (const brand in groupedPhoneCases) {
+    groupedPhoneCases[brand].sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+  }
 
   const brands = Object.keys(groupedPhoneCases).sort();
   const brandPhoneCases = selectedBrand
@@ -71,9 +78,8 @@ export function PhoneCaseSelector({
         setSelectedPhoneCaseId(savedModelId);
       }
     }
-  }, [phoneCases]); // وقتی لیست کیس‌ها لود شد
+  }, [phoneCases]);
 
-  // ✅ ذخیره‌ی خودکار در localStorage وقتی انتخاب عوض می‌شود
   useEffect(() => {
     if (selectedBrand) {
       localStorage.setItem("selectedBrand", selectedBrand);
@@ -113,7 +119,6 @@ export function PhoneCaseSelector({
         return;
       }
 
-      // Check if item already exists in cart
       const { data: existingItem } = await supabase
         .from("cart_items")
         .select("*")
@@ -209,7 +214,7 @@ export function PhoneCaseSelector({
         </div>
       </div>
 
-      <div className="fixed md:static bottom-3 right-3 left-3 p-4 backdrop-blur-sm bg-background/50 md:bg-card border rounded-xl">
+      <div className="fixed md:static bottom-3 right-3 left-3 p-4 backdrop-blur-sm bg-background/50 md:bg-card border border-input rounded-xl">
         {/* Price Section */}
         <div className="mb-2">
           <div className="flex items-center justify-between">

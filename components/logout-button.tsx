@@ -3,7 +3,6 @@
 import { useLogout } from "@/hooks/use-logout";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function LogoutButton() {
   const { logout, isLoading } = useLogout();
@@ -12,15 +11,11 @@ export function LogoutButton() {
     <Button
       onClick={logout}
       disabled={isLoading}
-      variant="ghost"
-      className="rounded-s-md size-8"
+      variant="destructive"
+      size="lg"
     >
-      <LogOut
-        className={cn(
-          "text-destructive",
-          isLoading && "rotate-180 duration-200"
-        )}
-      />
+      <LogOut />
+      لاگ اوت
     </Button>
   );
 }

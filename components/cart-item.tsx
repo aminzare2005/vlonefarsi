@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -45,18 +44,15 @@ export function CartItem({
 
   const updateQuantity = async (newQuantity: number) => {
     if (newQuantity < 1) return;
-
     setIsLoading(true);
     try {
       const { error } = await supabase
         .from("cart_items")
         .update({ quantity: newQuantity })
         .eq("id", id);
-
       if (error) throw error;
-
       router.refresh();
-    } catch (error) {
+    } catch {
       toast({
         title: "خطا",
         description: "مشکلی در به‌روزرسانی سبد خرید پیش آمد",
@@ -71,16 +67,14 @@ export function CartItem({
     setIsLoading(true);
     try {
       const { error } = await supabase.from("cart_items").delete().eq("id", id);
-
       if (error) throw error;
 
       toast({
         title: "محصول حذف شد",
         description: "محصول از سبد خرید حذف شد",
       });
-
       router.refresh();
-    } catch (error) {
+    } catch {
       toast({
         title: "خطا",
         description: "مشکلی در حذف محصول پیش آمد",
@@ -92,57 +86,72 @@ export function CartItem({
   };
 
   return (
-    <Card className="w-full">
-      <CardContent dir="ltr" className="px-4">
-        <div className="flex justify-between items-center gap-2">
-          <div className="flex gap-3">
-            <div className="h-auto w-16 pointer-events-none relative">
-              <PhonecaseCard size="small" image_url={image_url} />
-            </div>
-            <div className="h-full">
-              <h2 className="text-xl font-semibold">{name}</h2>
-              <p className="text-sm text-muted-foreground">
-                {phoneBrand} {phoneModel}
-              </p>
-              <div className="mt-1 flex items-center gap-2">
-                <p className="text-sm font-medium">{formattedPrice} تومان</p>
-                {!available && (
-                  <span className="text-xs text-red-600">(ناموجود)</span>
-                )}
-              </div>
-            </div>
+    <Card className="w-full bg-card/40 border p-4 border-stone-800/70 rounded-2xl overflow-hidden transition-all hover:border-stone-700 hover:shadow-[0_0_30px_-10px_rgba(255,255,255,0.08)]">
+      <div
+        dir="ltr"
+        className="grid grid-cols-5 justify-between h-full items-center gap-4"
+      >
+        {/* تصویر محصول */}
+        <div className="col-span-1 w-full flex items-center justify-center">
+          <div className="w-20 h-auto">
+            <PhonecaseCard size="small" image_url={image_url} />
           </div>
-          <div className="flex flex-col gap-2 items-center justify-center">
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 bg-transparent"
-              onClick={() => updateQuantity(quantity - 1)}
-              disabled={isLoading || quantity <= 1}
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <span className="w-8 text-center font-semibold">{quantity}</span>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 bg-transparent"
-              onClick={() => updateQuantity(quantity + 1)}
-              disabled={isLoading || !available}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+        </div>
+        {/* توضیحات */}
+        <div className="flex col-span-3 flex-col w-full h-full justify-between gap-1">
+          <div>
+            <h2 className="text-2xl font-semibold text-white/90 leading-tight">
+              {name}
+            </h2>
+            <p className="text-lg text-muted-foreground">{phoneModel}</p>
+          </div>
+
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-xl font-medium text-white/80">
+              {formattedPrice} تومان
+            </p>
+            {!available && (
+              <span className="text-xs text-red-500">(ناموجود)</span>
+            )}
+          </div>
+        </div>
+
+        {/* کنترل‌ها */}
+        <div className="flex w-full flex-col col-span-1 items-end justify-between gap-2">
+          <div className="flex items-center flex-col gap-1">
             <Button
               variant="ghost"
               size="icon"
-              onClick={removeItem}
-              disabled={isLoading}
+              className="size-8 text-white/70 hover:text-white"
+              onClick={() => updateQuantity(quantity + 1)}
+              disabled={isLoading || !available}
             >
-              <Trash2 className="h-4 w-4 text-destructive" />
+              <Plus className="size-4" />
+            </Button>
+
+            <span className="text-sm font-semibold text-white">{quantity}</span>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 text-white/70 hover:text-white"
+              onClick={() => updateQuantity(quantity - 1)}
+              disabled={isLoading || quantity <= 1}
+            >
+              <Minus className="size-4" />
             </Button>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-red-500 hover:text-red-400 size-8"
+            onClick={removeItem}
+            disabled={isLoading}
+          >
+            <Trash2 className="size-4" />
+          </Button>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }

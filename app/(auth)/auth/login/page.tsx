@@ -52,63 +52,58 @@ export default function LoginPage({
   };
 
   return (
-    <div
-      className="flex min-h-dvh w-full items-center justify-center p-6 md:p-10"
-      dir="rtl"
-    >
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">ورود به ویلون فارسی</CardTitle>
-              <CardDescription>
-                برای ورود، ایمیل و رمز عبور خودت رو وارد کن
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleLogin}>
-                <div className="flex flex-col gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">ایمیل</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="example@email.com"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="password">رمز عبور</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  {error && <p className="text-sm text-destructive">{error}</p>}
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "در حال ورود..." : "ورود"}
-                  </Button>
+    <div className="w-full max-w-sm">
+      <div className="flex flex-col gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">ورود به ویلون فارسی</CardTitle>
+            <CardDescription>
+              برای ورود، ایمیل و رمز عبور خودت رو وارد کن
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin}>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="email">ایمیل</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="example@email.com"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
-                <div className="mt-4 text-center text-sm">
-                  اکانت نداری؟{" "}
-                  <Link
-                    href={
-                      backTo ? `/auth/signup?backTo=${backTo}` : "/auth/signup"
-                    }
-                    className="underline underline-offset-4"
-                  >
-                    ثبت نام کن
-                  </Link>
+                <div className="grid gap-2">
+                  <Label htmlFor="password">رمز عبور</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "در حال ورود..." : "ورود"}
+                </Button>
+              </div>
+              <div className="mt-4 text-center text-sm">
+                اکانت نداری؟{" "}
+                <Link
+                  href={
+                    backTo ? `/auth/signup?backTo=${backTo}` : "/auth/signup"
+                  }
+                  className="underline underline-offset-4"
+                >
+                  ثبت نام کن
+                </Link>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

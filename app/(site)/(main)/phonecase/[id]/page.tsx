@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PhoneCaseSelector } from "@/components/phone-case-selector";
 import { notFound } from "next/navigation";
 import PhonecaseCard from "@/components/phonecaseCard";
+import Link from "next/link";
 
 export default async function ProductPage({
   params,
@@ -40,8 +41,10 @@ export default async function ProductPage({
       {/* Product Info Section */}
       <div className="flex justify-between flex-col w-full gap-4">
         <div className="flex flex-col gap-4">
-          <div className="opacity-70 font-light text-sm">
-            ویلون فارسی / قاب موبایل / {product.name}
+          <div className="opacity-70 cursor-pointer inline-flex flex-wrap gap-x-2 font-light text-sm">
+            <Link href={"/"}>ویلون فارسی</Link>/
+            <Link href={"/phonecase"}>قاب موبایل</Link>/
+            <Link href={`/phonecase/${product.id}`}>{product.name}</Link>
           </div>
           {/* Title */}
           <div className="space-y-4">
@@ -51,6 +54,10 @@ export default async function ProductPage({
             >
               {product.name}
             </h1>
+            <p dir="auto" className="w-full">
+              {product.description && product.description}
+            </p>
+            {/* TODO: put some static data abt phonecases */}
           </div>
         </div>
         <PhoneCaseSelector

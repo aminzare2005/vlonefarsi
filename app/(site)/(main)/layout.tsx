@@ -1,6 +1,6 @@
 import Header from "@/components/header";
 
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <main className="mx-auto pt-24 pb-8 px-4 max-w-5xl">{children}</main>
+      <main className="mx-auto max-w-5xl">{children}</main>
     </>
   );
 }

@@ -411,7 +411,7 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         </div>
       </div>
 
-      <div className="fixed md:static bottom-3 right-3 left-3 p-4 md:p-0 md:mt-4 backdrop-blur-sm bg-background/50 md:bg-transparent border md:border-0 rounded-xl">
+      <div className="fixed md:static bottom-3 right-3 left-3 z-50 p-4 md:p-0 md:mt-4 backdrop-blur-sm bg-background/50 md:bg-transparent border border-input md:border-0 rounded-xl">
         <Button
           type="submit"
           className="w-full cursor-pointer"
