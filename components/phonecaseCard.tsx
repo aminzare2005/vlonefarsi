@@ -1,6 +1,7 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 };
 
 function PhonecaseCard(props: Props) {
+  const router = useRouter();
   return (
     <div
       className={cn(
@@ -19,7 +21,11 @@ function PhonecaseCard(props: Props) {
         props.size === "big" && "rounded-3xl md:rounded-4xl"
       )}
     >
-      <Link className="h-full w-full" href={props.href || ""} draggable="false">
+      <div
+        className="h-full w-full"
+        onClick={() => router.push(props.href || "")}
+        draggable="false"
+      >
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
             width={120}
@@ -35,7 +41,7 @@ function PhonecaseCard(props: Props) {
           <div className="bg-black border border-stone-900 rounded-full w-full aspect-square mb-[10%]"></div>
           <div className="bg-black border border-stone-900 rounded-full w-full aspect-square"></div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

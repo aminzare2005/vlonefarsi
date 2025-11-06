@@ -42,7 +42,7 @@ export default function LoginPage({
         password,
       });
       if (error) throw error;
-      router.push(backTo ? `/phonecase/${backTo}` : "/phonecase");
+      router.push(backTo ? `/products/${backTo}` : "/products");
       router.refresh();
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "خطایی رخ داده است");

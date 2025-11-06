@@ -72,7 +72,7 @@ export default async function OrderSuccessPage({
                     </span>
                   </div>
                   <span className="font-mono font-bold text-foreground text-lg">
-                    {order?.id.slice(0, 8)}
+                    #{order?.track_id}
                   </span>
                 </div>
 
@@ -105,21 +105,16 @@ export default async function OrderSuccessPage({
 
             {/* Action buttons */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-              <Button
-                asChild
-                className="bg-foreground text-background shadow-md hover:shadow-lg transition-all duration-200"
-              >
-                <Link href={`/dashboard/orders/${searchParams.orderId}`}>
+              <Link href={`/track/${order?.track_id}`} className="w-full">
+                <Button variant="default" className="w-full">
                   مشاهده سفارش
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="border transition-all duration-200"
-              >
-                <Link href="/">بازگشت به فروشگاه</Link>
-              </Button>
+                </Button>
+              </Link>
+              <Link href="/" className="w-full">
+                <Button variant="outline" className="w-full">
+                  بازگشت به فروشگاه
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </div>

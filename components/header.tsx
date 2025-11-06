@@ -40,11 +40,11 @@ export default function Header() {
   const MENU_ITEMS = [
     {
       title: "قاب موبایل",
-      href: "/phonecase",
+      href: "/products",
     },
     {
       title: "طرح دلخواه",
-      href: "/phonecase/custom",
+      href: "/products/custom",
     },
     {
       title: "درباره ما",

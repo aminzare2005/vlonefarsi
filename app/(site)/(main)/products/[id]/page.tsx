@@ -39,12 +39,12 @@ export default async function ProductPage({
         </div>
       </div>
       {/* Product Info Section */}
-      <div className="flex justify-between flex-col w-full gap-4">
+      <div className="flex justify-between flex-col w-full gap-4 pb-4">
         <div className="flex flex-col gap-4">
           <div className="opacity-70 cursor-pointer inline-flex flex-wrap gap-x-2 font-light text-sm">
             <Link href={"/"}>ویلون فارسی</Link>/
-            <Link href={"/phonecase"}>قاب موبایل</Link>/
-            <Link href={`/phonecase/${product.id}`}>{product.name}</Link>
+            <Link href={"/products"}>قاب موبایل</Link>/
+            <Link href={`/products/${product.id}`}>{product.name}</Link>
           </div>
           {/* Title */}
           <div className="space-y-4">

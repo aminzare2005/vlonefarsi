@@ -55,7 +55,7 @@ export default function SignupPage({
         },
       });
       if (error) throw error;
-      router.push(backTo ? `/phonecase/${backTo}` : "/");
+      router.push(backTo ? `/products/${backTo}` : "/");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "خطایی رخ داده است");
     } finally {

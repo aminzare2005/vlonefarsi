@@ -44,6 +44,8 @@ const checkoutSchema = z.object({
     .string()
     .length(10, "کد پستی باید دقیقاً ۱۰ رقم باشد")
     .regex(/^\d+$/, "کد پستی باید فقط شامل اعداد باشد"),
+
+  telegram: z.string().min(5, "یوزرنیم باید حداقل 5 کاراکتر باشه").optional(),
 });
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
@@ -64,6 +66,7 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
     address: profile?.address || "",
     city: profile?.city || "",
     postalCode: profile?.postal_code || "",
+    telegram: profile?.telegram || "",
   });
 
   const router = useRouter();
@@ -167,11 +170,12 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           user_id: user.id,
           total_amount: total,
           status: "pending",
-          payment_status: "pending",
+          receiver_name: validatedData.displayName,
           shipping_address: validatedData.address,
           shipping_city: validatedData.city,
           shipping_postal_code: validatedData.postalCode,
           phone_number: validatedData.phoneNumber,
+          telegram: validatedData.telegram,
         })
         .select()
         .single();
@@ -204,6 +208,7 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           address: validatedData.address,
           city: validatedData.city,
           postal_code: validatedData.postalCode,
+          telegram: validatedData.telegram,
         })
         .eq("id", user.id);
 
@@ -407,6 +412,22 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           />
           {errors.postalCode && (
             <p className="text-sm text-destructive">{errors.postalCode}</p>
+          )}
+        </div>
+
+        {/* فیلد تلگرام */}
+        <div className="grid gap-2">
+          <Label htmlFor="city">تلگرام</Label>
+          <Input
+            id="telegram"
+            dir="ltr"
+            value={formData.telegram}
+            onChange={handleFieldChange("telegram")}
+            onBlur={handleFieldBlur("telegram")}
+            className={errors.telegram ? "border-destructive" : ""}
+          />
+          {errors.telegram && (
+            <p className="text-sm text-destructive">{errors.telegram}</p>
           )}
         </div>
       </div>

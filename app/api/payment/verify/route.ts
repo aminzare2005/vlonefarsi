@@ -30,8 +30,7 @@ export async function GET(request: NextRequest) {
         await supabase
           .from("orders")
           .update({
-            payment_status: "paid",
-            status: "processing",
+            status: "paid",
           })
           .eq("id", orderId)
 

@@ -85,7 +85,7 @@ export default function ProductGrid({
         {products.map((product) => (
           <PhonecaseCard
             key={product.id}
-            href={`/phonecase/${product.id}`}
+            href={`/products/${product.id}`}
             image_url={product.image_url}
             name={product.name}
             size="big"

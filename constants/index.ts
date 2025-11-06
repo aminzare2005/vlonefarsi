@@ -1,7 +1,7 @@
 export const MENU_ITEMS = [
   {
     title: "قاب‌ها",
-    href: "/phonecase",
+    href: "/products",
   },
   {
     title: "طرح دلخواه",
