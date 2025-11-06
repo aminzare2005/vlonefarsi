@@ -14,10 +14,7 @@ export function useLogout() {
       setIsLoading(true);
       await supabase.auth.signOut();
       router.replace("/");
-    } catch (error) {
-      console.log(error);
-      
-    } finally {
+    } catch {
       setIsLoading(false);
     }
   };

@@ -14,7 +14,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { TomanIcon } from "./toman.icon";
 import { cn } from "@/lib/utils";
 
 type PhoneCase = {
@@ -23,6 +22,7 @@ type PhoneCase = {
   model: string;
   price: number;
   available: boolean;
+  created_at: string;
 };
 
 type PhoneCaseSelectorProps = {
@@ -41,12 +41,18 @@ export function PhoneCaseSelector({
   const { toast } = useToast();
   const supabase = createClient();
 
-  // Group phone cases by brand
   const groupedPhoneCases = phoneCases.reduce((acc, phoneCase) => {
     if (!acc[phoneCase.brand]) acc[phoneCase.brand] = [];
     acc[phoneCase.brand].push(phoneCase);
     return acc;
   }, {} as Record<string, PhoneCase[]>);
+
+  for (const brand in groupedPhoneCases) {
+    groupedPhoneCases[brand].sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+  }
 
   const brands = Object.keys(groupedPhoneCases).sort();
   const brandPhoneCases = selectedBrand
@@ -72,9 +78,8 @@ export function PhoneCaseSelector({
         setSelectedPhoneCaseId(savedModelId);
       }
     }
-  }, [phoneCases]); // وقتی لیست کیس‌ها لود شد
+  }, [phoneCases]);
 
-  // ✅ ذخیره‌ی خودکار در localStorage وقتی انتخاب عوض می‌شود
   useEffect(() => {
     if (selectedBrand) {
       localStorage.setItem("selectedBrand", selectedBrand);
@@ -110,11 +115,10 @@ export function PhoneCaseSelector({
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/auth/login");
+        router.push(`/auth/login?backTo=${productId}`);
         return;
       }
 
-      // Check if item already exists in cart
       const { data: existingItem } = await supabase
         .from("cart_items")
         .select("*")
@@ -210,18 +214,18 @@ export function PhoneCaseSelector({
         </div>
       </div>
 
-      <div className="fixed md:static bottom-3 right-3 left-3 p-4 backdrop-blur-sm bg-background/50 md:bg-card border rounded-xl">
+      <div className="fixed md:static bottom-3 right-3 left-3 p-4 backdrop-blur-sm bg-background/50 md:bg-card border border-input rounded-xl">
         {/* Price Section */}
         <div className="mb-2">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">قیمت:</span>
             <span className="text-2xl font-bold text-primary min-h-8">
               {selectedPhoneCase ? (
-                <div className="gap-1 inline-flex items-center">
+                <div className="gap-1 text-xl inline-flex items-center">
                   {new Intl.NumberFormat("fa-IR").format(
                     selectedPhoneCase.price
                   )}
-                  <TomanIcon className="size-4" />
+                  تومان
                 </div>
               ) : (
                 ""

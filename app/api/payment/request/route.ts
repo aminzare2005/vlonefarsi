@@ -11,16 +11,15 @@ export async function POST(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        merchant: "zibal",
-        amount: amount * 10, // Convert to Rials (Toman * 10)
-        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/payment/verify`,
+        merchant: process.env.ZIBAL_MERCHANT_ID,
+        amount: amount * 10, // Convert to Rials
+        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/payment/verify`,
         description: `پرداخت سفارش ${orderId}`,
         orderId: orderId,
       }),
     })
 
     const data = await zibalResponse.json()
-    console.log("[v0] Zibal raw response:", data)
 
     if (data.result === 100) {
       return NextResponse.json({
@@ -37,7 +36,7 @@ export async function POST(request: NextRequest) {
       )
     }
   } catch (error) {
-    console.error("[v0] Payment request error:", error)
+    console.error("Payment request error:", error)
     return NextResponse.json(
       {
         success: false,

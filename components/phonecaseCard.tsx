@@ -1,6 +1,7 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -11,22 +12,28 @@ type Props = {
 };
 
 function PhonecaseCard(props: Props) {
+  const router = useRouter();
   return (
     <div
       className={cn(
-        "aspect-[9/18] hover:scale-101 w-full border border-stone-700 duration-300 bg-stone-900 overflow-hidden relative cursor-pointer",
+        "aspect-[9/18] w-full border border-stone-700 duration-300 bg-stone-900 overflow-hidden relative cursor-pointer",
         props.size === "small" && "rounded-lg",
         props.size === "big" && "rounded-3xl md:rounded-4xl"
       )}
     >
-      <Link className="h-full w-full" href={props.href || ""}>
+      <div
+        className="h-full w-full"
+        onClick={() => router.push(props.href || "")}
+        draggable="false"
+      >
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
-            width={120}
-            height={120}
+            width={100}
+            height={100}
             src={props.image_url || "/images/card-default.jpg"}
             alt={props.name || "قاب موبایل"}
             loading="lazy"
+            draggable="false"
             className="h-full w-full object-cover"
           />
         </div>
@@ -34,7 +41,7 @@ function PhonecaseCard(props: Props) {
           <div className="bg-black border border-stone-900 rounded-full w-full aspect-square mb-[10%]"></div>
           <div className="bg-black border border-stone-900 rounded-full w-full aspect-square"></div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

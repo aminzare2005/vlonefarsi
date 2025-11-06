@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          merchant: "zibal",
+          merchant: process.env.ZIBAL_MERCHANT_ID,
           trackId: trackId,
         }),
       })
@@ -30,8 +30,7 @@ export async function GET(request: NextRequest) {
         await supabase
           .from("orders")
           .update({
-            payment_status: "paid",
-            status: "processing",
+            status: "paid",
           })
           .eq("id", orderId)
 
@@ -47,7 +46,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL(`/order-success?orderId=${orderId}`, request.url))
       }
     } catch (error) {
-      console.error("[v0] Payment verification error:", error)
+      console.error("Payment verification error:", error)
     }
   }
 
