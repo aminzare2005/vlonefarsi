@@ -72,12 +72,19 @@ export default async function DashboardPage() {
           <StatCard
             icon={<Package className="h-6 w-6" />}
             title="آخرین خرید"
-            value={new Date(
-              recentOrders ? recentOrders[0]?.created_at : Date.now()
-            ).toLocaleString("fa-IR", {
-              day: "2-digit",
-              month: "long",
-            })}
+            value={
+              recentOrders &&
+              recentOrders.length > 0 &&
+              recentOrders[0]?.created_at
+                ? new Date(recentOrders[0].created_at).toLocaleDateString(
+                    "fa-IR",
+                    {
+                      day: "2-digit",
+                      month: "long",
+                    }
+                  )
+                : "—"
+            }
             gradient="from-pink-400 to-violet-400"
           />
         </div>
@@ -129,7 +136,7 @@ export default async function DashboardPage() {
                       </p>
                     </div>
                     <Button asChild className="rounded-full mt-2">
-                      <Link href="/products">مشاهده محصولات</Link>
+                      <Link href="/">مشاهده محصولات</Link>
                     </Button>
                   </div>
                 )}

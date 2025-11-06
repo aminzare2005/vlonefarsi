@@ -1,10 +1,14 @@
 export const MENU_ITEMS = [
   {
     title: "قاب‌ها",
-    href: "/products",
+    href: "/",
   },
   {
-    title: "طرح دلخواه",
-    href: "/custom",
+    title: "پشتیبانی",
+    href: "/support",
+  },
+  {
+    title: "اینستاگرام",
+    href: "https://instagram.com/vlonefarsi",
   },
 ];

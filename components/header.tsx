@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { MENU_ITEMS } from "@/constants";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,21 +37,6 @@ export default function Header() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  const MENU_ITEMS = [
-    {
-      title: "قاب موبایل",
-      href: "/products",
-    },
-    {
-      title: "طرح دلخواه",
-      href: "/products/custom",
-    },
-    {
-      title: "درباره ما",
-      href: "/about",
-    },
-  ];
 
   return (
     <>

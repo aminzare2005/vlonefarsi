@@ -12,7 +12,6 @@ import {
   RotateCcw,
   X,
 } from "lucide-react";
-import { motion } from "framer-motion";
 
 type Status =
   | "pending"
@@ -40,21 +39,21 @@ export default function OrderProgress({ status }: OrderProgressProps) {
     {
       key: "pending",
       label: "در انتظار پرداخت",
-      color: "bg-yellow-400",
+      color: "bg-yellow-300",
       icon: CreditCard,
       hide: true,
     },
     {
       key: "paid",
       label: "پرداخت شده",
-      color: "bg-emerald-400",
+      color: "bg-green-500",
       icon: Clock,
       hide: false,
     },
     {
       key: "outofstock",
       label: "ناموجود",
-      color: "bg-red-500",
+      color: "bg-red-400",
       icon: X,
       hide: true,
     },
@@ -106,7 +105,7 @@ export default function OrderProgress({ status }: OrderProgressProps) {
   const isActive = (index: number) => index <= activeIndex;
 
   return (
-    <div className="relative w-full flex justify-center py-12">
+    <div className="relative w-full flex justify-center py-8">
       <div className="relative flex flex-col gap-4 items-center w-full max-w-2xl">
         {/* خط مرکزی */}
         <div className="flex absolute items-center justify-center top-0 bottom-0 w-1 bg-gradient-to-b from-primary/30 via-muted to-transparent rounded-full" />
@@ -118,11 +117,8 @@ export default function OrderProgress({ status }: OrderProgressProps) {
             return;
           }
           return (
-            <motion.div
+            <div
               key={step.key}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
               className={cn(
                 "relative flex items-center justify-center bg-background border w-full gap-6 py-6 px-4 rounded-2xl transition-all",
                 active && "bg-card border",
@@ -132,18 +128,18 @@ export default function OrderProgress({ status }: OrderProgressProps) {
               )}
             >
               {/* توضیحات مرحله */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center text-black gap-1">
                 {index === activeIndex && <Icon />}
                 <span
                   className={cn(
                     "font-semibold text-lg",
-                    active ? "text-foreground" : "text-muted-foreground/70"
+                    active ? "text-black" : "text-muted-foreground/70"
                   )}
                 >
                   {step.label}
                 </span>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>

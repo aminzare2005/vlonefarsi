@@ -418,14 +418,19 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         {/* فیلد تلگرام */}
         <div className="grid gap-2">
           <Label htmlFor="city">تلگرام</Label>
-          <Input
-            id="telegram"
-            dir="ltr"
-            value={formData.telegram}
-            onChange={handleFieldChange("telegram")}
-            onBlur={handleFieldBlur("telegram")}
-            className={errors.telegram ? "border-destructive" : ""}
-          />
+          <div className="relative" dir="ltr">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+              @
+            </span>
+            <Input
+              id="telegram"
+              dir="ltr"
+              value={formData.telegram.replace(/^@/, "")}
+              onChange={handleFieldChange("telegram")}
+              onBlur={handleFieldBlur("telegram")}
+              className={errors.telegram ? "border-destructive pl-7" : "pl-7"}
+            />
+          </div>
           {errors.telegram && (
             <p className="text-sm text-destructive">{errors.telegram}</p>
           )}

@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
     })
 
     const data = await zibalResponse.json()
-    console.log("[Zibal raw response:", data)
 
     if (data.result === 100) {
       return NextResponse.json({

@@ -2,8 +2,17 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CheckCircle2, Package, CreditCard, Clock } from "lucide-react";
+import {
+  CheckCircle2,
+  Package,
+  CreditCard,
+  Clock,
+  LinkIcon,
+  Copy,
+} from "lucide-react";
 import { redirect } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default async function OrderSuccessPage({
   searchParams,
@@ -76,7 +85,7 @@ export default async function OrderSuccessPage({
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between pb-3 border-b">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <CreditCard className="h-4 w-4 text-foreground/80" />
                     <span className="text-sm text-foreground/80">
@@ -87,27 +96,25 @@ export default async function OrderSuccessPage({
                     {formattedTotal} تومان
                   </span>
                 </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-foreground/80" />
-                    <span className="text-sm text-foreground/80">
-                      وضعیت پرداخت:
-                    </span>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 font-semibold text-sm">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-                    پرداخت شده
-                  </span>
-                </div>
               </div>
             </div>
 
             {/* Action buttons */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-              <Link href={`/track/${order?.track_id}`} className="w-full">
-                <Button variant="default" className="w-full">
-                  مشاهده سفارش
+              <Link
+                target="_blank"
+                href={`/track/${order.track_id}`}
+                className="w-full"
+              >
+                <Button
+                  variant={"outline"}
+                  className="flex gap-1 items-center w-full from-indigo-600 to-violet-600 bg-gradient-to-br"
+                >
+                  پـیــگیری ســفارش
+                  <div className="bg-white/20 border rounded-lg flex items-center gap-1 px-1.5 animate-pulse">
+                    زنده
+                    <div className="size-2 mt-0.5 rounded-full bg-white"></div>
+                  </div>
                 </Button>
               </Link>
               <Link href="/" className="w-full">

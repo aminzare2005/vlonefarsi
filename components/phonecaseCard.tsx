@@ -28,8 +28,8 @@ function PhonecaseCard(props: Props) {
       >
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
-            width={120}
-            height={120}
+            width={100}
+            height={100}
             src={props.image_url || "/images/card-default.jpg"}
             alt={props.name || "قاب موبایل"}
             loading="lazy"

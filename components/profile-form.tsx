@@ -41,6 +41,8 @@ const profileSchema = z.object({
     .string()
     .length(10, "کد پستی باید ۱۰ رقمی باشد")
     .regex(/^\d+$/, "کد پستی باید فقط شامل اعداد باشد"),
+
+  telegram: z.string().min(5, "یوزرنیم باید حداقل 5 کاراکتر باشه").optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -61,6 +63,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
     address: profile?.address || "",
     city: profile?.city || "",
     postalCode: profile?.postal_code || "",
+    telegram: profile?.telegram || "",
   });
 
   const router = useRouter();
@@ -138,6 +141,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           address: validatedData.address,
           city: validatedData.city,
           postal_code: validatedData.postalCode,
+          telegram: validatedData.telegram,
         })
         .eq("id", user.id);
 
@@ -252,6 +256,10 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
       <div className="grid gap-3">
         <Label htmlFor="phoneNumber">شماره تماس</Label>
+        <p className="text-sm text-muted-foreground">
+          این شماره تماس باید در دسترس باشه تا درصورت لزوم مامور پست بتونه تماس
+          بگیره
+        </p>
         <Input
           id="phoneNumber"
           type="tel"
@@ -293,7 +301,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           className={`min-h-[100px] rounded-xl border-muted focus:ring-2 focus:ring-primary/30 resize-none ${
             errors.address ? "border-destructive" : ""
           }`}
-          placeholder="آدرس دقیق با تمام جزئیات مثل شماره واحد"
+          placeholder="آدرس دقیق با تمام جزئیات شامل محله، خیابان، کوچه، پلاک، شماره واحد یا زنگ"
           value={formData.address}
           onChange={handleFieldChange("address")}
           onBlur={handleFieldBlur("address")}
@@ -305,6 +313,10 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
       <div className="grid gap-3">
         <Label htmlFor="postalCode">کد پستی</Label>
+        <p className="text-sm text-muted-foreground">
+          اگه کد پستی رو پیدا نکردی، نزدیک ترین کد پستی به این آدرس رو وارد کن
+          مثل یه مغازه نزدیک
+        </p>
         <Input
           dir="ltr"
           id="postalCode"
@@ -329,6 +341,31 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         )}
       </div>
 
+      <div className="grid gap-3">
+        <Label htmlFor="telegram">آیدی تلگرام</Label>
+        <p className="text-sm text-muted-foreground">
+          درصورت بوجود اومدن مشکلی برای سفارشت، اول با این آیدی ارتباط میگیریم
+        </p>
+        <div dir="ltr" className="relative">
+          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+            @
+          </span>
+          <Input
+            dir="ltr"
+            id="telegram"
+            className={`pl-7 rounded-xl border-muted focus:ring-2 focus:ring-primary/30 ${
+              errors.telegram ? "border-destructive" : ""
+            }`}
+            placeholder="vlonefarsi :مثال"
+            value={formData.telegram.replace(/^@/, "")}
+            onChange={handleFieldChange("telegram")}
+            onBlur={handleFieldBlur("telegram")}
+          />
+        </div>
+        {errors.telegram && (
+          <p className="text-sm text-destructive mt-1">{errors.telegram}</p>
+        )}
+      </div>
       <Button
         type="submit"
         className="w-full rounded-xl text-base font-medium transition-all duration-200 hover:opacity-90"
@@ -336,12 +373,11 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       >
         {isLoading ? "در حال ذخیره..." : "ذخیره تغییرات"}
       </Button>
-
-      {(!isFormValid || !isFormComplete) && (
-        <p className="text-sm text-muted-foreground text-center">
-          لطفاً تمام فیلدها را به درستی پر کنید
-        </p>
-      )}
+      <p className="text-sm text-muted-foreground text-center">
+        درصورتی که اطلاعات رو اشتباه وارد کنید،
+        <br />
+        مسئولیت گم شدن سفارش یا هزینه ارسال مجددش با خودتونه:(
+      </p>
     </form>
   );
 }

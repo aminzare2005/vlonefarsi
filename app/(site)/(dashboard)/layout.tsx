@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import {
-  ArrowRight,
   HomeIcon,
   LucideSettings,
   ShoppingBasketIcon,
@@ -25,6 +24,20 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
 
+  function formatPhoneNumber(phoneNumber: string): string {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+
+    if (cleaned.startsWith("989") && cleaned.length === 12) {
+      return "0" + cleaned.substring(2);
+    }
+
+    if (cleaned.startsWith("09") && cleaned.length === 11) {
+      return cleaned;
+    }
+
+    return cleaned;
+  }
+
   return (
     <>
       <header className="fixed max-w-2xl h-16 mx-auto flex flex-row items-center gap-0.5 top-4 right-4 left-4 z-20 px-4 backdrop-blur-sm bg-background/50 border border-input rounded-full">
@@ -41,7 +54,7 @@ export default async function DashboardLayout({
             {user?.user_metadata.display_name || "کاربر"}
           </p>
           <p className="text-xs text-muted-foreground truncate">
-            {user.email || "کاربر مهمان"}
+            {formatPhoneNumber(user.phone || "")}
           </p>
         </div>
         <Link href={"/dashboard/me"}>

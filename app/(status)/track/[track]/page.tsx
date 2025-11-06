@@ -15,15 +15,13 @@ export default async function OrderIdPage({
     .from("orders")
     .select(
       `
-      *,
+      id,
+      track_id,
+      track_post_id,
+      total_amount,
+      created_at,
+      status,
       order_items (
-        id,
-        product_name,
-        product_id,
-        product_price,
-        quantity,
-        phone_brand,
-        phone_model,
         products (
           image_url
         )
@@ -36,6 +34,5 @@ export default async function OrderIdPage({
   if (!order) {
     notFound();
   }
-  console.log("NIGNIG", order);
   return <TrackPageClient order={order} />;
 }
