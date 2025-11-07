@@ -20,11 +20,9 @@ export default function LoginPage({
 }: {
   searchParams: Promise<{ backTo: string }>;
 }) {
-  // Unwrap searchParams with React.use()
   const resolvedSearchParams = use(searchParams);
   const backTo = resolvedSearchParams?.backTo;
 
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -72,10 +70,40 @@ export default function LoginPage({
         password,
       });
       if (error) throw error;
+
       router.push(backTo ? `/products/${backTo}` : "/");
       router.refresh();
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "خطایی رخ داده است");
+    } catch (err: unknown) {
+      let message = "خطایی رخ داده است";
+
+      if (err instanceof Error) {
+        const englishMessage = err.message.toLowerCase();
+
+        // 🗺️ Map Supabase errors to Persian messages
+        const errorMap: Record<string, string> = {
+          "invalid login credentials": "شماره یا رمز عبور اشتباه است",
+          "user not found": "کاربری با این مشخصات یافت نشد",
+          "network error": "خطا در اتصال به سرور. لطفاً بعداً تلاش کنید",
+          "email not confirmed": "ایمیل شما هنوز تأیید نشده است",
+          "invalid phone number": "شماره تلفن وارد شده معتبر نیست",
+          "too many requests": "تعداد درخواست‌ها زیاد است، کمی صبر کنید",
+          "invalid password": "رمز عبور اشتباه است",
+        };
+
+        // 🔍 Match the English error message
+        for (const [key, value] of Object.entries(errorMap)) {
+          if (englishMessage.includes(key)) {
+            message = value;
+            break;
+          }
+        }
+
+        if (message === "خطایی رخ داده است") {
+          console.warn("Unhandled Supabase error:", err.message);
+        }
+      }
+
+      setError(message);
       setIsLoading(false);
     }
   };
@@ -87,23 +115,12 @@ export default function LoginPage({
           <CardHeader>
             <CardTitle className="text-2xl">ورود به ویلون فارسی</CardTitle>
             <CardDescription>
-              برای ورود، ایمیل و رمز عبور خودت رو وارد کن
+              برای ورود، شماره تماس و رمز عبور خودت رو وارد کن
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
               <div className="flex flex-col gap-6">
-                {/* <div className="grid gap-2">
-                  <Label htmlFor="email">ایمیل</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="example@email.com"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div> */}
                 <div className="grid gap-2">
                   <Label htmlFor="phone">شماره</Label>
                   <Input
