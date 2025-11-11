@@ -12,9 +12,55 @@ const font = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: "VLONEFARSI",
+  title: {
+    default: "© ویلون فارسی",
+    template: "%s | © ویلون فارسی",
+  },
   description: "OFFICIAL WEBSITE OF @VLONEFARSI IG BRAND",
-  generator: "@cwpslxck",
+  keywords: ["VLONEFARSI", "فارسی", "برند", "مرچ", "قاب موبایل"],
+  authors: [{ name: "cwpslxck" }],
+  creator: "cwpslxck",
+  publisher: "VLONEFARSI",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL("https://vlonefarsi.ir"),
+  openGraph: {
+    type: "website",
+    locale: "fa_IR",
+    url: "https://vlonefarsi.ir",
+    title: "© ویلون فارسی",
+    description: "OFFICIAL WEBSITE OF @VLONEFARSI IG BRAND",
+    siteName: "VLONEFARSI",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "VLONEFARSI",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "© ویلون فارسی",
+    description: "OFFICIAL WEBSITE OF @VLONEFARSI IG BRAND",
+    images: ["/twitter-image.jpg"],
+    creator: "@vlonefarsi",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
