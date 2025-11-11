@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 type Props = {
   href?: string;
@@ -11,8 +11,17 @@ type Props = {
   size: "small" | "big";
 };
 
+const blurDataURL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q==";
+
 function PhonecaseCard(props: Props) {
   const router = useRouter();
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   return (
     <div
       className={cn(
@@ -28,16 +37,30 @@ function PhonecaseCard(props: Props) {
       >
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
-            width={100}
-            height={100}
+            width={300}
+            height={600}
             src={props.image_url || "/images/card-default.jpg"}
             alt={props.name || "قاب موبایل"}
             loading="lazy"
             draggable="false"
-            className="h-full w-full object-cover"
+            className={cn(
+              "h-full w-full object-cover transition-all duration-500",
+              !imageLoaded && "blur"
+            )}
+            placeholder="blur"
+            blurDataURL={blurDataURL}
+            onLoad={handleImageLoad}
+            quality={85}
           />
         </div>
-        <div className="flex absolute rounded-full bg-stone-800 border border-stone-900/40 flex-col w-1/3 m-[5%] p-[4%] left-0 top-0">
+
+        {/* UI Elements */}
+        <div
+          className={cn(
+            "flex absolute rounded-full bg-stone-800 border transition-all duration-500 border-stone-900/40 flex-col w-1/3 m-[5%] p-[4%] left-0 top-0",
+            !imageLoaded && "blur"
+          )}
+        >
           <div className="bg-black border border-stone-900 rounded-full w-full aspect-square mb-[10%]"></div>
           <div className="bg-black border border-stone-900 rounded-full w-full aspect-square"></div>
         </div>

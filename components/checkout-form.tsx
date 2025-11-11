@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { createClient } from "@/lib/supabase/client";
 import { Textarea } from "./ui/textarea";
 import { z } from "zod";
+import { ArrowLeft } from "lucide-react";
 
 interface CheckoutFormProps {
   profile: any;
@@ -314,7 +315,7 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid gap-4">
         {/* فیلد نام */}
         <div className="grid gap-2">
@@ -348,6 +349,10 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
             onBlur={handleFieldBlur("phoneNumber")}
             className={errors.phoneNumber ? "border-destructive" : ""}
           />
+          <p className="text-sm text-muted-foreground">
+            این شماره تماس باید در دسترس باشه تا درصورت لزوم مامور پست بتونه
+            تماس بگیره
+          </p>
           {errors.phoneNumber && (
             <p className="text-sm text-destructive">{errors.phoneNumber}</p>
           )}
@@ -410,6 +415,10 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
             onBlur={handleFieldBlur("postalCode")}
             className={errors.postalCode ? "border-destructive" : ""}
           />
+          <p className="text-sm text-muted-foreground">
+            اگه کد پستی رو پیدا نکردی، نزدیک ترین کد پستی به این آدرس رو وارد کن
+            مثل یه مغازه نزدیک
+          </p>
           {errors.postalCode && (
             <p className="text-sm text-destructive">{errors.postalCode}</p>
           )}
@@ -431,22 +440,29 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
               className={errors.telegram ? "border-destructive pl-7" : "pl-7"}
             />
           </div>
+          <p className="text-sm text-muted-foreground">
+            درصورت بوجود اومدن مشکلی برای سفارشت، اول با این آیدی ارتباط میگیریم
+          </p>
           {errors.telegram && (
             <p className="text-sm text-destructive">{errors.telegram}</p>
           )}
         </div>
       </div>
+      <p className="text-sm text-center">
+        درصورتی که اطلاعات رو اشتباه وارد کنید،
+        <br />
+        مسئولیت گم شدن سفارش یا هزینه ارسال مجددش با خودتونه:(
+      </p>
 
-      <div className="fixed md:static bottom-3 right-3 left-3 z-50 p-4 md:p-0 md:mt-4 backdrop-blur-sm bg-background/50 md:bg-transparent border border-input md:border-0 rounded-xl">
-        <Button
-          type="submit"
-          className="w-full cursor-pointer"
-          size="lg"
-          disabled={isLoading || !isFormValid || !isFormComplete}
-        >
-          {isLoading ? "در حال پردازش..." : "پرداخت و ثبت نهایی سفارش"}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        className="w-full cursor-pointer"
+        size="lg"
+        disabled={isLoading || !isFormValid || !isFormComplete}
+      >
+        {isLoading ? "در حال پردازش..." : "ثبت نهایی سفارش و پرداخت"}
+        <ArrowLeft />
+      </Button>
     </form>
   );
 }

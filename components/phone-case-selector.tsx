@@ -214,41 +214,43 @@ export function PhoneCaseSelector({
         </div>
       </div>
 
-      <div className="fixed md:static bottom-3 right-3 left-3 p-4 backdrop-blur-sm bg-background/50 md:bg-card border border-input rounded-xl">
-        {/* Price Section */}
-        <div className="mb-2">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">قیمت:</span>
-            <span className="text-2xl font-bold text-primary min-h-8">
-              {selectedPhoneCase ? (
-                <div className="gap-1 text-xl inline-flex items-center">
-                  {new Intl.NumberFormat("fa-IR").format(
-                    selectedPhoneCase.price
-                  )}
-                  تومان
-                </div>
-              ) : (
-                ""
-              )}
-            </span>
+      <div className="fixed md:static md:max-w-none max-w-2xl mx-auto w-full bottom-0 right-0 left-0 z-50 p-2 md:p-0">
+        <div className="p-4 backdrop-blur-sm bg-background/50 border border-input rounded-xl">
+          {/* Price Section */}
+          <div className="mb-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">قیمت:</span>
+              <span className="text-2xl font-bold text-primary min-h-8">
+                {selectedPhoneCase ? (
+                  <div className="gap-1 text-xl inline-flex items-center">
+                    {new Intl.NumberFormat("fa-IR").format(
+                      selectedPhoneCase.price
+                    )}
+                    تومان
+                  </div>
+                ) : (
+                  ""
+                )}
+              </span>
+            </div>
           </div>
-        </div>
 
-        <Button
-          onClick={handleAddToCart}
-          disabled={!selectedBrand || !selectedPhoneCaseId || isLoading}
-          className="w-full"
-          size="lg"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-              در حال افزودن...
-            </>
-          ) : (
-            "افزودن به سبد خرید"
-          )}
-        </Button>
+          <Button
+            onClick={handleAddToCart}
+            disabled={!selectedBrand || !selectedPhoneCaseId || isLoading}
+            className="w-full"
+            size="lg"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                در حال افزودن...
+              </>
+            ) : (
+              "افزودن به سبد خرید"
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );
