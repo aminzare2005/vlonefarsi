@@ -29,7 +29,7 @@ export default async function ProductPage({
     .order("model");
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 md:gap-12 pb-24 md:pb-8">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-12 pb-28 md:pb-8">
       {/* Product Image Section */}
       <div className="w-full md:w-1/3">
         <div className="pointer-events-none flex items-center justify-center p-4 md:p-0">
@@ -39,11 +39,11 @@ export default async function ProductPage({
         </div>
       </div>
       {/* Product Info Section */}
-      <div className="flex justify-between flex-col w-full gap-4 pb-4">
+      <div className="flex justify-between flex-col w-full gap-4">
         <div className="flex flex-col gap-4">
           <div className="opacity-70 cursor-pointer inline-flex flex-wrap gap-x-2 font-light text-sm">
             <Link href={"/"}>ویلون فارسی</Link>/
-            <Link href={"/"}>قاب موبایل</Link>/
+            <Link href={"/products"}>قاب موبایل</Link>/
             <Link href={`/products/${product.id}`}>{product.name}</Link>
           </div>
           {/* Title */}
