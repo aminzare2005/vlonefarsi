@@ -37,11 +37,12 @@ function PhonecaseCard(props: Props) {
       >
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
-            width={300}
-            height={600}
+            width={props.size == "big" ? 160 : 100}
+            height={props.size == "big" ? 160 : 100}
             src={props.image_url || "/images/card-default.jpg"}
             alt={props.name || "قاب موبایل"}
             loading="lazy"
+            quality={props.size == "big" ? 75 : 50}
             draggable="false"
             className={cn(
               "h-full w-full object-cover transition-all duration-500",
