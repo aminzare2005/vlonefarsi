@@ -1,12 +1,19 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PhonecaseCard from "@/components/phonecaseCard";
 import {
   CustomPhoneCaseSelector,
   uploadAndCreateProduct,
 } from "@/features/custom/custom-phonecase-selector";
-import { Download, ImageIcon, ImagePlusIcon, Upload, X } from "lucide-react";
+import {
+  Download,
+  ImageIcon,
+  ImagePlusIcon,
+  ShoppingBasket,
+  Upload,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -22,33 +29,56 @@ export default function CustomPhoneCasePageClient({
   const supabase = createClient();
   const [imageUrl, setImageUrl] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // state جدید برای مدیریت محصول ایجاد شده
   const [isAddingToProducts, setIsAddingToProducts] = useState(false);
   const [createdProductId, setCreatedProductId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedImage = localStorage.getItem("customPhonecasePreviewImage");
+    if (savedImage) {
+      setImageUrl(savedImage);
+    }
+  }, []);
 
   const handleFileChange = (file: File) => {
     if (!file) return;
 
-    // بررسی نوع فایل
     if (!file.type.startsWith("image/")) {
-      alert("لطفاً یک فایل تصویری انتخاب کنید");
+      toast({
+        title: "فایل باید حتما تصویر باشه",
+        variant: "destructive",
+      });
       return;
     }
 
-    // بررسی سایز فایل (مثلاً 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("حجم فایل باید کمتر از 5 مگابایت باشد");
+      toast({
+        title: "حجم فایل باید کمتر از 5 مگابایت باشه",
+        variant: "destructive",
+      });
       return;
     }
 
-    const preview = URL.createObjectURL(file);
-    setImageUrl(preview);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      setImageUrl(base64);
+      localStorage.setItem("customPhonecasePreviewImage", base64);
+      setCreatedProductId(null);
+    };
+    reader.readAsDataURL(file);
+  };
 
-    // وقتی تصویر جدید آپلود میشه، محصول قبلی رو پاک کن
+  const handleRemoveImage = () => {
+    setImageUrl("");
+    localStorage.removeItem("customPhonecasePreviewImage");
     setCreatedProductId(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -71,17 +101,10 @@ export default function CustomPhoneCasePageClient({
     }
   };
 
-  const handleRemoveImage = () => {
-    setImageUrl("");
-    setCreatedProductId(null); // محصول رو هم پاک کن
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   const handleAddToProducts = async () => {
     if (!imageUrl) return;
 
+    setIsLoading(true);
     setIsAddingToProducts(true);
 
     try {
@@ -94,7 +117,6 @@ export default function CustomPhoneCasePageClient({
         return;
       }
 
-      // استفاده از تابع کمکی و ذخیره product_id
       const result = await uploadAndCreateProduct(imageUrl, user.id, supabase);
       setCreatedProductId(result.product_id);
 
@@ -112,6 +134,7 @@ export default function CustomPhoneCasePageClient({
         variant: "destructive",
       });
     } finally {
+      setIsLoading(false);
       setIsAddingToProducts(false);
     }
   };
@@ -214,23 +237,32 @@ export default function CustomPhoneCasePageClient({
               )}
             </div>
           </div>
-          <div className="fixed md:static bottom-3 right-3 left-3 md:p-0 p-4 backdrop-blur-sm bg-background/50 md:border-0 border border-input rounded-xl">
-            <div className="flex gap-2">
+          <div className="fixed md:static z-50 bottom-3 right-3 left-3 md:p-0 p-4 backdrop-blur-sm bg-background/50 md:border-0 border border-input rounded-xl">
+            <div className="flex justify-between gap-2">
               {imageUrl ? (
-                <Button
-                  variant={"destructive"}
-                  size={"icon-lg"}
-                  onClick={handleRemoveImage}
-                >
-                  <X className="size-6" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant={"destructive"}
+                    size={"icon-lg"}
+                    onClick={handleRemoveImage}
+                    disabled={isLoading}
+                  >
+                    <X className="size-6" />
+                  </Button>
+                  <Link href={"#AddToCartButton"}>
+                    <Button variant={"outline"} size={"icon-lg"}>
+                      <ShoppingBasket className="size-6" />
+                    </Button>
+                  </Link>
+                </div>
               ) : (
                 <Button
                   variant={"outline"}
-                  size={"icon-lg"}
+                  size={"lg"}
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <Upload className="size-6" />
+                  آپلود عکس
                 </Button>
               )}
               <Button
@@ -244,7 +276,7 @@ export default function CustomPhoneCasePageClient({
                   ? "اضافه شده به قاب‌ها"
                   : isAddingToProducts
                   ? "در حال افزودن..."
-                  : "اضافه کردن به قاب‌ها"}
+                  : "ارسال پیشنهاد"}
               </Button>
             </div>
           </div>
@@ -255,6 +287,7 @@ export default function CustomPhoneCasePageClient({
             image_url={imageUrl}
             phoneCases={phoneCases}
             createdProductId={createdProductId}
+            loading={isLoading}
           />
         </div>
       </div>

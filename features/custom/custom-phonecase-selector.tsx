@@ -28,6 +28,7 @@ type CustomPhoneCaseSelectorProps = {
   image_url: string;
   phoneCases: PhoneCase[];
   createdProductId?: string | null;
+  loading: boolean;
 };
 
 export function CustomPhoneCaseSelector(props: CustomPhoneCaseSelectorProps) {
@@ -238,12 +239,14 @@ export function CustomPhoneCaseSelector(props: CustomPhoneCaseSelectorProps) {
         </div>
 
         <Button
+          id="AddToCartButton"
           onClick={handleAddToCart}
           disabled={
             !selectedBrand ||
             !selectedPhoneCaseId ||
             isLoading ||
-            !props.image_url
+            !props.image_url ||
+            props.loading
           }
           className="w-full"
           size="lg"

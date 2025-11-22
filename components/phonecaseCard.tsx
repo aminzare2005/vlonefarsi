@@ -30,7 +30,7 @@ function PhonecaseCard(props: Props) {
           <Image
             width={props.size == "big" ? 160 : 100}
             height={props.size == "big" ? 160 : 100}
-            src={props.image_url || "/images/card-default.jpg"}
+            src={props.image_url || "/images/card-default.png"}
             alt={props.name || "قاب موبایل"}
             loading="lazy"
             quality={props.size == "big" ? 75 : 50}

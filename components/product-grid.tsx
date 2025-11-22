@@ -5,17 +5,6 @@ import { createClient } from "@/lib/supabase/client";
 import PhonecaseCard from "@/components/phonecaseCard";
 import { useInView } from "react-intersection-observer";
 import PhonecaseCardSkeleton from "./phonecaseCardSkeleton";
-import { BellIcon, CctvIcon, PackageX, RefreshCcwIcon } from "lucide-react"; // آیکن خالی بودن
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyMedia,
-  EmptyHeader,
-  EmptyTitle,
-  EmptyContent,
-} from "./ui/empty";
-import { Button } from "./ui/button";
 import EmptyCommon from "./empty-common";
 
 type Product = {
@@ -60,6 +49,7 @@ export default function ProductGrid({
     const { data, error } = await supabase
       .from("products")
       .select("*")
+      .eq("feed", true)
       .order("created_at", { ascending: false })
       .range(from, to);
 
