@@ -49,8 +49,8 @@ export default async function ProductPage({
           {/* Title */}
           <div className="space-y-4">
             <h1
-              dir="ltr"
-              className="text-4xl md:text-5xl text-left md:text-start font-bold text-white leading-tight"
+              dir="auto"
+              className="text-4xl md:text-5xl text-start font-bold text-white leading-tight"
             >
               {product.name}
             </h1>
