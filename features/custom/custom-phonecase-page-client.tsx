@@ -143,9 +143,16 @@ export default function CustomPhoneCasePageClient({
     <div className="flex flex-col md:flex-row gap-6 md:gap-12 pb-20 md:pb-4">
       {/* Product Image Section */}
       <div className="w-full md:w-1/3">
-        <div className="pointer-events-none flex items-center justify-center p-4 md:p-0">
-          <div className="w-1/2 md:w-full">
-            <PhonecaseCard size="big" image_url={imageUrl} />
+        <div className="flex items-center justify-center p-4 md:p-0">
+          <div
+            className="w-1/2 md:w-full"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <PhonecaseCard
+              size="big"
+              image_url={imageUrl}
+              className="pointer-events-none"
+            />
           </div>
         </div>
       </div>
