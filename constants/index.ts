@@ -4,6 +4,10 @@ export const MENU_ITEMS = [
     href: "/",
   },
   {
+    title: "قاب کاستوم",
+    href: "/products/custom",
+  },
+  {
     title: "پشتیبانی",
     href: "/support",
   },
