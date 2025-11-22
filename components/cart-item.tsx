@@ -94,7 +94,11 @@ export function CartItem({
         {/* تصویر محصول */}
         <div className="col-span-1 w-full flex items-center justify-center">
           <div className="w-20 h-auto">
-            <PhonecaseCard size="small" image_url={image_url} />
+            <PhonecaseCard
+              size="small"
+              image_url={image_url}
+              href={`/products/${productId}`}
+            />
           </div>
         </div>
         {/* توضیحات */}

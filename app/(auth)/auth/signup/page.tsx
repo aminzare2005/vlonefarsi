@@ -20,33 +20,24 @@ export default function SignupPage({
 }: {
   searchParams: Promise<{ backTo: string }>;
 }) {
-  // Unwrap searchParams with React.use()
   const resolvedSearchParams = use(searchParams);
   const backTo = resolvedSearchParams?.backTo;
 
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // تابع برای فرمت خودکار شماره تلفن
   const formatPhoneNumber = (value: string) => {
     const numbers = value.replace(/\D/g, "");
     const limited = numbers.slice(0, 11);
-
-    if (limited.length <= 4) {
-      return limited;
-    } else if (limited.length <= 7) {
+    if (limited.length <= 4) return limited;
+    if (limited.length <= 7)
       return `${limited.slice(0, 4)} ${limited.slice(4)}`;
-    } else {
-      return `${limited.slice(0, 4)} ${limited.slice(4, 7)} ${limited.slice(
-        7
-      )}`;
-    }
+    return `${limited.slice(0, 4)} ${limited.slice(4, 7)} ${limited.slice(7)}`;
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +57,6 @@ export default function SignupPage({
       return;
     }
 
-    // اعتبارسنجی شماره تلفن قبل از ارسال
     const cleanedPhone = phone.replace(/\s/g, "");
     if (!/^09\d{9}$/.test(cleanedPhone)) {
       setError("شماره تماس باید با 09 شروع شود و 11 رقم باشد");
@@ -87,9 +77,33 @@ export default function SignupPage({
         },
       });
       if (error) throw error;
+
       router.push(backTo ? `/products/${backTo}` : "/");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "خطایی رخ داده است");
+    } catch (err: unknown) {
+      let message = "خطایی رخ داده است";
+
+      if (err instanceof Error) {
+        const englishMessage = err.message.toLowerCase();
+
+        // 🗺️ Map Supabase error messages to Persian
+        const errorMap: Record<string, string> = {
+          "user already registered": "کاربری با این شماره از قبل وجود داره",
+          "invalid phone number": "شماره تلفن وارد شده معتبر نیست",
+          "invalid password": "رمز عبور معتبر نیست",
+          "password should be at least": "رمز عبور باید حداقل ۶ کاراکتر باشه",
+          "network error": "خطا در ارتباط با سرور. دوباره امتحان کن",
+          "too many requests": "تعداد درخواست‌ها زیاد است، دوباره امتحان کن",
+        };
+
+        for (const [key, value] of Object.entries(errorMap)) {
+          if (englishMessage.includes(key)) {
+            message = value;
+            break;
+          }
+        }
+      }
+
+      setError(message);
       setIsLoading(false);
     }
   };
@@ -105,18 +119,6 @@ export default function SignupPage({
           <CardContent>
             <form onSubmit={handleSignUp}>
               <div className="flex flex-col gap-6">
-                {/* <div className="grid gap-2">
-                  <Label htmlFor="email">ایمیل</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="example@email.com"
-                    required
-                    dir="ltr"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div> */}
                 <div className="grid gap-2">
                   <Label htmlFor="phone">شماره</Label>
                   <Input

@@ -62,7 +62,7 @@ export default async function CartCheckoutPage() {
   const formattedTotal = new Intl.NumberFormat("fa-IR").format(total);
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col items-center gap-8">
+    <div className="max-w-xl mx-auto flex flex-col items-center gap-8 pb-36">
       <div className="flex flex-col gap-4 items-center w-full">
         {cartItems.map((item: any) => (
           <CartItem
@@ -87,20 +87,26 @@ export default async function CartCheckoutPage() {
         <CheckoutForm profile={profile} total={total} />
       </div>
 
-      <div className="flex flex-col w-full gap-1 md:mb-0 mb-20">
-        <div className="flex justify-between items-center">
-          <p className="text-sm text-muted-foreground">جمع خرید:</p>
-          <p className="font-medium">{formattedSubtotal} تومان</p>
-        </div>
-        <div className="flex justify-between items-center">
-          <p className="text-sm text-muted-foreground">هزینه ارسال (با پست):</p>
-          <p className="font-medium">{formattedPostPrice} تومان</p>
-        </div>
-        <div className="flex justify-between items-center border-t pt-2 mt-1">
-          <p className="font-semibold text-lg">مجموع نهایی:</p>
-          <p className="text-2xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-            {formattedTotal} تومان
-          </p>
+      <div className="fixed max-w-2xl mx-auto w-full bottom-0 right-0 left-0 z-50 p-2">
+        <div className="p-4 backdrop-blur-sm bg-background/50 border border-input rounded-xl">
+          <div className="flex flex-col w-full gap-1">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-muted-foreground">جمع خرید:</p>
+              <p className="font-medium">{formattedSubtotal} تومان</p>
+            </div>
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-muted-foreground">
+                هزینه ارسال (با پست):
+              </p>
+              <p className="font-medium">{formattedPostPrice} تومان</p>
+            </div>
+            <div className="flex justify-between items-center border-t pt-2 mt-1">
+              <p className="font-semibold text-lg">مجموع نهایی:</p>
+              <p className="text-2xl font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                {formattedTotal} تومان
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

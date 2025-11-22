@@ -12,7 +12,7 @@ export const MENU_ITEMS = [
     href: "/support",
   },
   {
-    title: "اینستاگرام",
-    href: "https://instagram.com/vlonefarsi",
+    title: "درباره ویلون فارسی",
+    href: "/about",
   },
 ];
