@@ -9,6 +9,7 @@ type Props = {
   image_url?: string;
   name?: string;
   size: "small" | "big";
+  className?: string;
 };
 
 const blurDataURL =
@@ -25,6 +26,7 @@ function PhonecaseCard(props: Props) {
   return (
     <div
       className={cn(
+        props.className,
         "aspect-[9/18] w-full border border-stone-700 duration-300 bg-stone-900 overflow-hidden relative cursor-pointer",
         props.size === "small" && "rounded-lg",
         props.size === "big" && "rounded-3xl md:rounded-4xl"
@@ -37,11 +39,12 @@ function PhonecaseCard(props: Props) {
       >
         <div className="absolute w-full h-full top-0 right-0 left-0">
           <Image
-            width={300}
-            height={600}
-            src={props.image_url || "/images/card-default.jpg"}
+            width={props.size == "big" ? 160 : 100}
+            height={props.size == "big" ? 160 : 100}
+            src={props.image_url || "/images/card-default.png"}
             alt={props.name || "قاب موبایل"}
             loading="lazy"
+            quality={props.size == "big" ? 75 : 50}
             draggable="false"
             className={cn(
               "h-full w-full object-cover transition-all duration-500",
