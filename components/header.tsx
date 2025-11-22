@@ -42,7 +42,7 @@ export default function Header() {
     <>
       <header
         className={cn(
-          "fixed max-w-2xl h-16 mx-auto flex flex-row items-center gap-2 top-4 right-4 left-4 z-20 px-4 backdrop-blur-sm bg-background/50 border border-input rounded-full",
+          "fixed max-w-2xl h-16 mx-auto flex flex-row items-center gap-2 top-4 right-4 left-4 z-[99999] px-4 backdrop-blur-sm bg-background/50 border border-input rounded-full",
           isMenuOpen && "bg-transparent backdrop-blur-none border-transparent"
         )}
       >
@@ -104,7 +104,7 @@ export default function Header() {
         </div>
       </header>
       {isMenuOpen && (
-        <div className="fixed inset-0 z-10">
+        <div className="fixed inset-0 z-[99998]">
           <div
             className="absolute inset-0 bg-background/50 backdrop-blur-md"
             onClick={() => setIsMenuOpen(false)}

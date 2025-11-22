@@ -145,7 +145,7 @@ export default function CustomPhoneCasePageClient({
       <div className="w-full md:w-1/3">
         <div className="flex items-center justify-center p-4 md:p-0">
           <div
-            className="w-1/2 md:w-full"
+            className="w-1/2 md:w-full cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
           >
             <PhonecaseCard
@@ -197,7 +197,7 @@ export default function CustomPhoneCasePageClient({
               className="hidden"
             />
 
-            <div className="flex flex-col items-center justify-center gap-3">
+            <div className="flex min-h-36 flex-col items-center justify-center gap-3">
               {imageUrl ? (
                 <>
                   <div
@@ -245,7 +245,7 @@ export default function CustomPhoneCasePageClient({
             </div>
           </div>
           <div className="fixed md:static z-50 bottom-3 right-3 left-3 md:p-0 p-4 backdrop-blur-sm bg-background/50 md:border-0 border border-input rounded-xl">
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between md:justify-start gap-2">
               {imageUrl ? (
                 <div className="flex gap-2">
                   <Button
