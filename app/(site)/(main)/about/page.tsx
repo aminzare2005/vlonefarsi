@@ -1,3 +1,4 @@
+import { DisplayVersion } from "@/components/display-version";
 import { Button } from "@/components/ui/button";
 import { GlobeIcon, InstagramIcon, SendIcon } from "lucide-react";
 import Link from "next/link";
@@ -80,6 +81,12 @@ function AboutPage() {
             </Button>
           </Link>
         </div>
+      </div>
+      <div
+        dir="ltr"
+        className="border-t pt-2 text-center opacity-70 font-thin tracking-wider text-xs"
+      >
+        © VLONEFARSI 2025 - <DisplayVersion />
       </div>
     </div>
   );
