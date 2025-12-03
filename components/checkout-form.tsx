@@ -214,6 +214,11 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         .eq("id", user.id);
 
       // Initialize Zibal payment
+      console.log("📦 Sending payment request with:", {
+        orderId: order.id,
+        amount: total,
+      });
+
       const response = await fetch("/api/payment/request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -223,7 +228,12 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         }),
       });
 
+      // log raw response
+      console.log("📨 Raw payment response:", response);
+
       const paymentData = await response.json();
+      // log parsed data
+      console.log("💳 Parsed payment data:", paymentData);
 
       if (paymentData.success && paymentData.trackId) {
         // Update order with payment reference
