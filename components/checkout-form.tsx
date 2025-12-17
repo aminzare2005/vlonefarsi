@@ -17,6 +17,12 @@ import { ArrowLeft } from "lucide-react";
 interface CheckoutFormProps {
   profile: any;
   total: number;
+  onDiscountChange: (
+    discount: {
+      discountAmount: number;
+      freeShipping: boolean;
+    } | null
+  ) => void;
 }
 
 // Schema تعریف شده با Zod
@@ -51,7 +57,11 @@ const checkoutSchema = z.object({
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
-export function CheckoutForm({ profile, total }: CheckoutFormProps) {
+export function CheckoutForm({
+  profile,
+  total,
+  onDiscountChange,
+}: CheckoutFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<
     Partial<Record<keyof CheckoutFormData, string>>
@@ -70,9 +80,156 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
     telegram: profile?.telegram || "",
   });
 
-  const router = useRouter();
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountLoading, setDiscountLoading] = useState(false);
+
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    discountId: string;
+    discountAmount: number;
+    freeShipping: boolean;
+  } | null>(null);
+
+  const finalTotal = Math.max(
+    total - (appliedDiscount?.discountAmount || 0),
+    0
+  );
+
   const { toast } = useToast();
   const supabase = createClient();
+
+  const applyDiscountCode = async () => {
+    if (!discountCode.trim()) return;
+
+    setDiscountLoading(true);
+
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return;
+      }
+
+      // 1. گرفتن تخفیف
+      const { data: discount, error } = await supabase
+        .from("discounts")
+        .select("*")
+        .eq("code", discountCode.trim())
+        .eq("is_active", true)
+        .single();
+
+      if (error || !discount) {
+        toast({
+          title: "کد تخفیف معتبر نیست",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const now = new Date();
+
+      // 2. بررسی تاریخ
+      if (
+        (discount.starts_at && new Date(discount.starts_at) > now) ||
+        (discount.expires_at && new Date(discount.expires_at) < now)
+      ) {
+        toast({
+          title: "کد تخفیف دیگه اعتبار نداره!",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // 3. حداقل مبلغ سفارش
+      if (discount.min_order_amount && total < discount.min_order_amount) {
+        toast({
+          title: `حداقل مبلغ سفارش برای این کد ${discount.min_order_amount.toLocaleString()} تومان است`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // 4. بررسی تعداد استفاده کل
+      if (discount.usage_limit) {
+        const { count } = await supabase
+          .from("discount_usages")
+          .select("*", { count: "exact", head: true })
+          .eq("discount_id", discount.id);
+
+        if ((count || 0) >= discount.usage_limit) {
+          toast({
+            title: "کد تخفیف دیگه اعتبار نداره!",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
+      // 5. بررسی تعداد استفاده کاربر
+      if (discount.usage_per_user) {
+        const { count } = await supabase
+          .from("discount_usages")
+          .select("*", { count: "exact", head: true })
+          .eq("discount_id", discount.id)
+          .eq("user_id", user.id);
+
+        if ((count || 0) >= discount.usage_per_user) {
+          toast({
+            title: "قبلا از این کد استفاده کردی",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
+      // 6. محاسبه تخفیف
+      let discountAmount = 0;
+      let freeShipping = false;
+
+      if (discount.type === "percentage") {
+        discountAmount = Math.floor((total * discount.value) / 100);
+
+        if (discount.max_discount_amount) {
+          discountAmount = Math.min(
+            discountAmount,
+            discount.max_discount_amount
+          );
+        }
+      }
+
+      if (discount.type === "fixed") {
+        discountAmount = Math.min(discount.value, total);
+      }
+
+      if (discount.type === "free_shipping") {
+        freeShipping = true;
+      }
+
+      // 7. ست کردن state
+      setAppliedDiscount({
+        discountId: discount.id,
+        discountAmount,
+        freeShipping,
+      });
+
+      onDiscountChange({
+        discountAmount,
+        freeShipping,
+      });
+
+      toast({
+        title: "کد تخفیف اعمال شد",
+        description: "تخفیف با موفقیت روی سفارش اعمال شد",
+      });
+    } catch (err: any) {
+      console.error(err);
+      setAppliedDiscount(null);
+      onDiscountChange(null);
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
 
   // بررسی اعتبارسنجی کل فرم
   useEffect(() => {
@@ -169,7 +326,10 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         .from("orders")
         .insert({
           user_id: user.id,
-          total_amount: total,
+          total_amount: finalTotal,
+          discount_id: appliedDiscount?.discountId || null,
+          discount_amount: appliedDiscount?.discountAmount || 0,
+          free_shipping: appliedDiscount?.freeShipping || false,
           status: "pending",
           receiver_name: validatedData.displayName,
           shipping_address: validatedData.address,
@@ -219,7 +379,7 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           orderId: order.id,
-          amount: total,
+          amount: finalTotal,
         }),
       });
 
@@ -448,6 +608,40 @@ export function CheckoutForm({ profile, total }: CheckoutFormProps) {
           )}
         </div>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>کد تخفیف</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="flex items-center flex-col-reverse md:flex-row gap-2">
+            <Button
+              className="w-full md:w-fit"
+              type="button"
+              onClick={applyDiscountCode}
+              disabled={discountLoading || !!appliedDiscount}
+            >
+              اعمال
+            </Button>
+            <Input
+              dir="ltr"
+              placeholder="مثلا: YALDA1403"
+              value={discountCode}
+              onChange={(e) => setDiscountCode(e.target.value)}
+              disabled={discountLoading || !!appliedDiscount}
+            />
+          </div>
+
+          {appliedDiscount && (
+            <p className="text-sm text-green-400">
+              {appliedDiscount.freeShipping
+                ? "ارسال رایگان اعمال شد"
+                : "تخفیف اعمال شد"}
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
       <p className="text-sm text-center">
         درصورتی که اطلاعات رو اشتباه وارد کنید،
         <br />
