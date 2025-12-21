@@ -3,6 +3,7 @@ import { PhoneCaseSelector } from "@/components/phone-case-selector";
 import { notFound } from "next/navigation";
 import PhonecaseCard from "@/components/phonecaseCard";
 import Link from "next/link";
+import AdminBar from "@/components/admin-bar";
 
 export default async function ProductPage({
   params,
@@ -30,6 +31,7 @@ export default async function ProductPage({
 
   return (
     <div className="flex flex-col md:flex-row gap-6 md:gap-12 pb-28 md:pb-8">
+      <AdminBar id={product.id} image_url={product.image_url} />
       {/* Product Image Section */}
       <div className="w-full md:w-1/3">
         <div className="pointer-events-none flex items-center justify-center p-4 md:p-0">
