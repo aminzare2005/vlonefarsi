@@ -5,26 +5,23 @@ import Image from "next/image";
 import React from "react";
 import { toPng } from "html-to-image";
 import { Button } from "@/components/ui/button";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 function page() {
-  const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
 
-  const id = params.id;
+  const id = searchParams.get("id") || "vlonefarsi-mockup";
   const image_url = searchParams.get("image_url") || "/images/mockup-bg.png";
 
   const handleExport = async () => {
     const node = document.getElementById("mockup");
 
     if (!node) return;
-    console.log(node);
 
     const dataUrl = await toPng(node, {
       cacheBust: true,
       pixelRatio: 3,
     });
-    console.log(dataUrl);
 
     const link = document.createElement("a");
     link.download = `${id}.png`;
