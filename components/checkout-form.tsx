@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +12,17 @@ import { createClient } from "@/lib/supabase/client";
 import { Textarea } from "./ui/textarea";
 import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 interface CheckoutFormProps {
   profile: any;
@@ -484,8 +494,10 @@ export function CheckoutForm({
     (value) => value.trim().length > 0
   );
 
+  const format = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
+
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4">
       <div className="grid gap-4">
         {/* فیلد نام */}
         <div className="grid gap-2">
@@ -618,6 +630,11 @@ export function CheckoutForm({
           )}
         </div>
       </div>
+      <p className="text-sm text-center">
+        درصورتی که اطلاعات رو اشتباه وارد کنید،
+        <br />
+        مسئولیت گم شدن سفارش یا هزینه ارسال مجددش با خودتونه:(
+      </p>
 
       <Card>
         <CardHeader>
@@ -635,9 +652,15 @@ export function CheckoutForm({
             </Button>
             <Input
               dir="ltr"
-              placeholder="مثلا: YALDA1403"
+              placeholder="مثلا: YALDA"
               value={discountCode}
-              onChange={(e) => setDiscountCode(e.target.value)}
+              className="uppercase"
+              onChange={(e) => {
+                const value = e.target.value;
+                const englishOnly = value.replace(/[^a-zA-Z0-9]/g, "");
+                const upperValue = englishOnly.toUpperCase();
+                setDiscountCode(upperValue);
+              }}
               disabled={discountLoading || !!appliedDiscount}
             />
           </div>
@@ -652,21 +675,45 @@ export function CheckoutForm({
         </CardContent>
       </Card>
 
-      <p className="text-sm text-center">
-        درصورتی که اطلاعات رو اشتباه وارد کنید،
-        <br />
-        مسئولیت گم شدن سفارش یا هزینه ارسال مجددش با خودتونه:(
-      </p>
-
-      <Button
-        type="submit"
-        className="w-full cursor-pointer"
-        size="lg"
-        disabled={isLoading || !isFormValid || !isFormComplete}
-      >
-        {isLoading ? "در حال پردازش..." : "ثبت نهایی سفارش و پرداخت"}
-        <ArrowLeft />
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            type="button"
+            className="w-full"
+            size="lg"
+            disabled={isLoading || !isFormValid || !isFormComplete}
+          >
+            {isLoading ? "در حال پردازش..." : "ادامه"}
+            <ArrowLeft />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              ثبت سفارش به مبلغ {format(finalTotal)}؟
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              آماده سازی قاب ها یه فرایند 5 تا 10 روزه داره و بعد تحویل پست داده
+              میشه که ارسالش به نسبت شهری که هستید ممکنه بین 3 تا 7 روز طول
+              بکشه.
+              <br />
+              بعد از ثبت سفارش، میتونید بصورت لحظه ای از وضعیت سفارشتون مطلع
+              بشید!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>انصراف</AlertDialogCancel>
+            <Button
+              onClick={handleSubmit}
+              className="w-full cursor-pointer"
+              disabled={isLoading || !isFormValid || !isFormComplete}
+            >
+              {isLoading ? "در حال پردازش..." : "اوکی بریم پرداخت کنیم"}
+              <ArrowLeft />
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   );
 }
