@@ -4,20 +4,49 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SendIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { useRouter } from "next/navigation";
 
 function SupportPage() {
   const [started, setStarted] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
-  const router = useRouter();
+  const [isPrefetched, setIsPrefetched] = useState(false);
+  const telegramUrl = "https://t.me/vl9nefarsi";
+
+  // Pre-fetch لینک به محض لود کامپوننت
+  useEffect(() => {
+    const prefetchLink = async () => {
+      try {
+        // استفاده از Prefetch برای لینک
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = telegramUrl;
+        link.as = "document";
+        document.head.appendChild(link);
+
+        // همچنین می‌توانیم از fetch API برای pre-fetch استفاده کنیم
+        await fetch(telegramUrl, { mode: "no-cors", cache: "force-cache" });
+
+        setIsPrefetched(true);
+      } catch (error) {
+        console.log("Prefetch completed (errors are expected due to CORS)");
+        setIsPrefetched(true);
+      }
+    };
+
+    prefetchLink();
+  }, []);
+
+  // بازکردن لینک در تب جدید
+  const openInNewTab = () => {
+    window.open(telegramUrl, "_blank", "noopener,noreferrer");
+  };
 
   useEffect(() => {
     if (started) {
       setProgressValue(100);
       const redirect = setTimeout(() => {
-        router.push("https://t.me/vl9nefarsi");
+        openInNewTab();
+        setStarted(false);
       }, 3000);
-
       return () => {
         clearTimeout(redirect);
       };
@@ -41,6 +70,7 @@ function SupportPage() {
             size="lg"
             dir="ltr"
             className="gap-0.5 w-full"
+            disabled={!isPrefetched}
           >
             <SendIcon />
             @vl9nefarsi
